@@ -29,14 +29,31 @@ namespace DemoBS23.DAL.DatabaseContext
         }
 
         #region DbSets  
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<Designation> Designations { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            //base.OnModelCreating(modelBuilder);
+            #region Product
+            modelBuilder.Entity<Product>().HasKey(p => p.Id);
+            modelBuilder.Entity<Product>().Property(p=>p.Id).UseIdentityColumn(1,1);
+            modelBuilder.Entity<Product>().Property(p=>p.Name).IsRequired(true).HasMaxLength(255);
+
+            //modelBuilder.Entity<Product>()
+            //    .HasMany<Category>(p => p.Categories)
+            //    .WithMany(c => c.Products);
+            #endregion
+
+            #region Category
+            modelBuilder.Entity<Category>().HasKey(c => c.Id);
+            modelBuilder.Entity<Category>().Property(c => c.Name).HasMaxLength(255).IsRequired(true);
+            #endregion
+
+
+
         }
 
     }

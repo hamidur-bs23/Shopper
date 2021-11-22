@@ -1,4 +1,6 @@
+using DemoBS23.BLL.Services.ProductService;
 using DemoBS23.DAL.DatabaseContext;
+using DemoBS23.DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,8 +29,6 @@ namespace DemoBS23.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<appDbContext>();
-
             services.AddControllers();
             services.AddSwaggerGen(options =>
             {
@@ -45,6 +45,20 @@ namespace DemoBS23.API
                 options.IncludeXmlComments(filePath);
 
             });
+
+            #region DbContext DI
+            services.AddDbContext<appDbContext>();
+            #endregion
+
+            #region Repositories DI
+            services.AddScoped<IProductRepo, ProductRepo>();
+            #endregion
+
+            #region Services DI
+            services.AddScoped<IProductService, ProductService>();
+            #endregion
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

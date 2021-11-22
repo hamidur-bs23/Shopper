@@ -8,4 +8,8 @@
     <ProjectReference Include="..\DemoBS23.DAL\DemoBS23.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+  </ItemGroup>
+
 </Project>
