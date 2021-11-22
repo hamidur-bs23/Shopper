@@ -1,0 +1,6 @@
+EF Core Commands
+======================
+1. add-migration
+2. update-database
+
+

@@ -1,3 +1,4 @@
+using DemoBS23.DAL.DatabaseContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +27,8 @@ namespace DemoBS23.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<appDbContext>();
+
             services.AddControllers();
             services.AddSwaggerGen(options =>
             {
