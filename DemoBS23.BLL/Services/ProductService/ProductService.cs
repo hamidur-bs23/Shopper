@@ -20,16 +20,45 @@ namespace DemoBS23.BLL.Services.ProductService
             _mapper = mapper;
         }
 
-        public async Task<ResultSet<IList<Product>>> GetAllProducts()
+        public async Task<ResultSet<IList<Product>>> GetAll()
         {
-            //throw new NotImplementedException();
             ResultSet<IList<Product>> resultSet = new ResultSet<IList<Product>>();
+            try
+            {
+                resultSet.Data = (IList<Product>) await  _productRepo.GetAll();
 
-            var fromDB = (IList<Product>)await _productRepo.GetAllProducts();
-
-            resultSet.Data = _mapper.Map<IList<Product>>(fromDB);
+                if (resultSet.Data != null)
+                {
+                    resultSet.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultSet.errorMessage = ex.Message;
+            }
 
             return resultSet;
+        }
+
+        public async Task<ResultSet<Product>> GetById(int id)
+        {
+            ResultSet<Product> resultSet = new ResultSet<Product>();
+            try
+            {
+                resultSet.Data = await _productRepo.GetById(id);
+
+                if (resultSet.Data != null)
+                {
+                    resultSet.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultSet.errorMessage = ex.Message;
+            }
+            
+            return resultSet;
+
         }
     }
 }

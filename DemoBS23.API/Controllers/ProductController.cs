@@ -1,4 +1,5 @@
 ﻿
+using DemoBS23.API.Utilities;
 using DemoBS23.BLL.Services;
 using DemoBS23.BLL.Services.ProductService;
 using DemoBS23.DAL.Entities;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace DemoBS23.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/Product")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -21,18 +22,67 @@ namespace DemoBS23.API.Controllers
             _productService = productService;
         }
 
-        [HttpGet("GetAllProducts")]
-        public async Task<IActionResult> GetAllProducts()
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
-            var result = await _productService.GetAllProducts();
-            
-            if(result.Data != null)
+            if (!ModelState.IsValid)
             {
-                return Ok(result);
+                return BadRequest("Sorry");
             }
-            return NotFound();
+
+            ResultSet<IList<Product>> result;
+
+            try
+            {
+                result = await _productService.GetAll();
+                if (result.Data != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
         }
 
-        
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Sorry");
+            }
+
+            ResultSet<Product> result;
+
+            try
+            {
+                result = await _productService.GetById(id);
+                if (result.Data != null && result.Success == true)
+                {
+                    return Ok(result);
+                }
+
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                var innerEx = ex.InnerException;
+                string innerErrorMessages = ex.Message;
+
+                while(innerEx != null)
+                {
+                    innerErrorMessages += innerEx.Message;
+                    innerEx = innerEx.InnerException;
+                }
+
+                return BadRequest(ex.StackTrace + innerErrorMessages);
+            }
+        }
+
+
     }
 }

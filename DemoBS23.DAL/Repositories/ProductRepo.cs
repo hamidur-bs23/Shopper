@@ -1,6 +1,8 @@
-﻿using DemoBS23.DAL.Entities;
+﻿using DemoBS23.DAL.DatabaseContext;
+using DemoBS23.DAL.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,16 +10,41 @@ namespace DemoBS23.DAL.Repositories
 {
     public class ProductRepo : IProductRepo
     {
-        public async Task<IEnumerable<Product>> GetAllProducts()
-        {
-            var products = new List<Product>
-            {
-                new Product{Id=1, Name="A", Price=100},
-                new Product{Id=2, Name="B", Price=200},
-                new Product{Id=3, Name="C", Price=300},
-            };
+        private readonly ProductDbContext _context;
 
-            return products;
+        public ProductRepo(ProductDbContext context)
+        {
+            _context = context;
+        }
+        public async Task<IEnumerable<Product>> GetAll()
+        {
+            IList<Product> productsFromDb = null;
+
+            try
+            {
+                productsFromDb = _context.Products.Select(x=>x).ToList();    
+                return productsFromDb;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Product> GetById(int id)
+        {
+            Product productFromDb = null;
+            try
+            {
+                productFromDb = _context.Products.FirstOrDefault(x => x.Id == id);
+                return productFromDb;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
     }
 }

@@ -9,6 +9,8 @@ namespace DemoBS23.BLL.Services.ProductService
 {
     public interface IProductService
     {
-        public Task<ResultSet<IList<Product>>> GetAllProducts();
+        public Task<ResultSet<IList<Product>>> GetAll();
+
+        public Task<ResultSet<Product>> GetById(int id);
     }
 }

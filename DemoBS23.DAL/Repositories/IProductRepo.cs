@@ -9,6 +9,7 @@ namespace DemoBS23.DAL.Repositories
 {
     public interface IProductRepo
     {
-        public Task<IEnumerable<Product>> GetAllProducts();
+        public Task<IEnumerable<Product>> GetAll();
+        public Task<Product> GetById(int id);
     }
 }
