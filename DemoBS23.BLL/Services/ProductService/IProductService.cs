@@ -12,5 +12,7 @@ namespace DemoBS23.BLL.Services.ProductService
         public Task<ResultSet<IList<Product>>> GetAll();
 
         public Task<ResultSet<Product>> GetById(int id);
+
+        public Task<ResultSet<Product>> AddOne(Product newProduct);
     }
 }

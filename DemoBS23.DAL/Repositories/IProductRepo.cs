@@ -11,5 +11,8 @@ namespace DemoBS23.DAL.Repositories
     {
         public Task<IEnumerable<Product>> GetAll();
         public Task<Product> GetById(int id);
+
+        public Task<Product> AddOne(Product newProduct);
+
     }
 }

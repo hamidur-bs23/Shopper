@@ -84,5 +84,40 @@ namespace DemoBS23.API.Controllers
         }
 
 
+        [HttpPost()]
+        public async Task<IActionResult> AddOne(Product newProduct)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Sorry");
+            }
+
+            ResultSet<Product> result;
+
+            try
+            {
+                result = await _productService.AddOne(newProduct);
+                if (result.Data != null && result.Success == true)
+                {
+                    return CreatedAtAction(nameof(GetById), new { id = newProduct.Id }, newProduct);
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                var innerEx = ex.InnerException;
+                string innerErrorMessages = ex.Message;
+
+                while (innerEx != null)
+                {
+                    innerErrorMessages += innerEx.Message;
+                    innerEx = innerEx.InnerException;
+                }
+
+                return BadRequest(ex.StackTrace + innerErrorMessages);
+            }
+        }
+
     }
 }

@@ -16,6 +16,25 @@ namespace DemoBS23.DAL.Repositories
         {
             _context = context;
         }
+
+       
+        public async Task<Product> AddOne(Product newProduct)
+        {
+            try
+            {
+                await _context.Products.AddAsync(newProduct);
+
+                await _context.SaveChangesAsync();
+
+                return newProduct;                
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
+        }
+
         public async Task<IEnumerable<Product>> GetAll()
         {
             IList<Product> productsFromDb = null;
@@ -46,5 +65,6 @@ namespace DemoBS23.DAL.Repositories
             }
             
         }
+
     }
 }
