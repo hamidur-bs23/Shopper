@@ -66,5 +66,9 @@ namespace DemoBS23.DAL.Repositories
             
         }
 
+        public async Task<Product> Update(Product newProduct)
+        {
+            _context.Update(newProduct);
+        }
     }
 }

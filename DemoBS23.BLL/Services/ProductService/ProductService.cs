@@ -80,5 +80,43 @@ namespace DemoBS23.BLL.Services.ProductService
             return resultSet;
 
         }
+
+        public async Task<ResultSet<Product>> UpdateById(int id, Product updateProduct)
+        {
+            ResultSet<Product> resultSet = new ResultSet<Product>();
+            try
+            {
+                Product productFromDb = await _productRepo.GetById(id);
+                if (productFromDb == null)
+                {
+                    resultSet.errorMessage = "No Product Found to be updated!";
+                    return resultSet;
+                }
+
+                productFromDb.Name = updateProduct.Name;
+                productFromDb.Price = updateProduct.Price;
+
+                try
+                {
+                    resultSet.Data = await _productRepo.Update(productFromDb);
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }                
+
+                if (resultSet.Data != null)
+                {
+                    resultSet.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultSet.errorMessage = ex.Message;
+            }
+
+            return resultSet;
+        }
     }
 }

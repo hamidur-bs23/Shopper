@@ -84,7 +84,7 @@ namespace DemoBS23.API.Controllers
         }
 
 
-        [HttpPost()]
+        [HttpPost]
         public async Task<IActionResult> AddOne(Product newProduct)
         {
             if (!ModelState.IsValid)
