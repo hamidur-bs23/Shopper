@@ -15,6 +15,7 @@ namespace DemoBS23.DAL.Repositories
         public Task<Product> AddOne(Product newProduct);
 
         public Task<Product> Update(Product newProduct);
+        public Task<bool> Delete(Product deleteProduct);
 
     }
 }

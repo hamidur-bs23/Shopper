@@ -70,16 +70,7 @@ namespace DemoBS23.API.Controllers
             }
             catch (Exception ex)
             {
-                var innerEx = ex.InnerException;
-                string innerErrorMessages = ex.Message;
-
-                while(innerEx != null)
-                {
-                    innerErrorMessages += innerEx.Message;
-                    innerEx = innerEx.InnerException;
-                }
-
-                return BadRequest(ex.StackTrace + innerErrorMessages);
+                return BadRequest(ex.AppExceptionHandler());
             }
         }
 
@@ -106,18 +97,59 @@ namespace DemoBS23.API.Controllers
             }
             catch (Exception ex)
             {
-                var innerEx = ex.InnerException;
-                string innerErrorMessages = ex.Message;
-
-                while (innerEx != null)
-                {
-                    innerErrorMessages += innerEx.Message;
-                    innerEx = innerEx.InnerException;
-                }
-
-                return BadRequest(ex.StackTrace + innerErrorMessages);
+                return BadRequest(ex.AppExceptionHandler());
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Product updateProduct)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Sorry");
+            }
+
+            try
+            {
+                var isUpdated = await _productService.Update(id, updateProduct);
+                if (isUpdated)
+                {
+                    return NoContent();
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Sorry");
+            }
+
+            try
+            {
+                var isDeleted = await _productService.Delete(id);
+                if (isDeleted)
+                {
+                    return NoContent();
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
+        }
+
 
     }
 }

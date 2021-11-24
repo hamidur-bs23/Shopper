@@ -35,6 +35,23 @@ namespace DemoBS23.DAL.Repositories
             
         }
 
+        public async Task<bool> Delete(Product deleteProduct)
+        {
+            try
+            {
+                var deletedProductFromDb = _context.Remove(deleteProduct);
+                await _context.SaveChangesAsync();
+
+                if (deletedProductFromDb.Entity != null)
+                    return true;
+                else return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<Product>> GetAll()
         {
             IList<Product> productsFromDb = null;
@@ -68,7 +85,19 @@ namespace DemoBS23.DAL.Repositories
 
         public async Task<Product> Update(Product newProduct)
         {
-            _context.Update(newProduct);
+            try
+            {
+                var updatedProduct= _context.Update(newProduct);
+                await _context.SaveChangesAsync();
+
+                if(updatedProduct.Entity !=null)
+                    return updatedProduct.Entity;
+                throw new Exception("Update Failed!");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

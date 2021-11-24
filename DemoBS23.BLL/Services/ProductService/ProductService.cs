@@ -40,6 +40,31 @@ namespace DemoBS23.BLL.Services.ProductService
             return resultSet;
         }
 
+        public async Task<bool> Delete(int id)
+        {
+            ResultSet<Product> resultSet = new ResultSet<Product>();
+            try
+            {
+                Product productFromDb = await _productRepo.GetById(id);
+                if (productFromDb == null)
+                {
+                    return false;
+                }
+
+                var isDeleted = await _productRepo.Delete(productFromDb);
+                if (isDeleted)
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultSet.errorMessage = ex.Message;
+            }
+
+            return false;
+        }
+
         public async Task<ResultSet<IList<Product>>> GetAll()
         {
             ResultSet<IList<Product>> resultSet = new ResultSet<IList<Product>>();
@@ -81,7 +106,7 @@ namespace DemoBS23.BLL.Services.ProductService
 
         }
 
-        public async Task<ResultSet<Product>> UpdateById(int id, Product updateProduct)
+        public async Task<bool> Update(int id, Product updateProduct)
         {
             ResultSet<Product> resultSet = new ResultSet<Product>();
             try
@@ -89,8 +114,7 @@ namespace DemoBS23.BLL.Services.ProductService
                 Product productFromDb = await _productRepo.GetById(id);
                 if (productFromDb == null)
                 {
-                    resultSet.errorMessage = "No Product Found to be updated!";
-                    return resultSet;
+                    return false;
                 }
 
                 productFromDb.Name = updateProduct.Name;
@@ -102,7 +126,6 @@ namespace DemoBS23.BLL.Services.ProductService
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }                
 
@@ -110,13 +133,14 @@ namespace DemoBS23.BLL.Services.ProductService
                 {
                     resultSet.Success = true;
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 resultSet.errorMessage = ex.Message;
             }
 
-            return resultSet;
+            return false;
         }
     }
 }
