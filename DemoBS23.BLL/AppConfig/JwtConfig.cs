@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace DemoBS23.API.Utilities
+namespace DemoBS23.BLL.AppConfig
 {
     public class JwtConfig
     {

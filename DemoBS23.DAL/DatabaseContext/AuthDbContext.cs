@@ -5,9 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+
 namespace DemoBS23.DAL.DatabaseContext
 {
-    class AuthDbContext : IdentityDbContext<AuthUser>
+    public class AuthDbContext : IdentityDbContext<AuthUser>
     {
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
@@ -20,6 +21,7 @@ namespace DemoBS23.DAL.DatabaseContext
         {
             base.OnConfiguring(optionsBuilder);
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             DateTime _modifiedDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

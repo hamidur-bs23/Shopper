@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DemoBS23.DAL.Entities.Auth
 {
-    class AuthRefreshToken
+    public class AuthRefreshToken
     {
         public AuthRefreshToken()
         {

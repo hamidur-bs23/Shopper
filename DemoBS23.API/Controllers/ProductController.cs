@@ -3,6 +3,7 @@ using DemoBS23.API.Utilities;
 using DemoBS23.BLL.Services;
 using DemoBS23.BLL.Services.ProductService;
 using DemoBS23.DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace DemoBS23.API.Controllers
             }
         }
 
-
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -74,7 +75,7 @@ namespace DemoBS23.API.Controllers
             }
         }
 
-
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> AddOne(Product newProduct)
         {
@@ -101,6 +102,7 @@ namespace DemoBS23.API.Controllers
             }
         }
 
+        //[Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Product updateProduct)
         {
@@ -125,7 +127,7 @@ namespace DemoBS23.API.Controllers
             }
         }
 
-
+        //[Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
