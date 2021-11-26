@@ -32,11 +32,12 @@ namespace DemoBS23.API.Controllers.Auth
             try
             {
                 AuthResultSet result = await _authService.RegistrationAsync(userToCreate);
-                if (result != null)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
-                return BadRequest("Try again later. Bad Request");
+
+                return BadRequest(result);
             }
             catch (Exception exception)
             {

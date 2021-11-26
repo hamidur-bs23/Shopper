@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DemoBS23.DAL.Migrations.Auth
 {
-    public partial class AuthInit : Migration
+    public partial class init_authDbContext : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -164,7 +164,7 @@ namespace DemoBS23.DAL.Migrations.Auth
                     IsUsed = table.Column<bool>(type: "bit", nullable: false),
                     IsRevoked = table.Column<bool>(type: "bit", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    creation_date = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2021, 11, 25, 7, 28, 48, 620, DateTimeKind.Utc).AddTicks(4245)),
+                    creation_date = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2021, 11, 26, 13, 7, 11, 361, DateTimeKind.Utc).AddTicks(9847)),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc))
                 },
                 constraints: table =>

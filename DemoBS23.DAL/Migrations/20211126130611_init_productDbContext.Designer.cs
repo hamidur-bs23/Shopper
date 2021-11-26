@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoBS23.DAL.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20211124142021_Prodcut Table Validation")]
-    partial class ProdcutTableValidation
+    [Migration("20211126130611_init_productDbContext")]
+    partial class init_productDbContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

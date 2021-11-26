@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DemoBS23.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/Product")]
     public class ProductController : ControllerBase
@@ -23,20 +24,16 @@ namespace DemoBS23.API.Controllers
             _productService = productService;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Sorry");
-            }
-
             ResultSet<IList<Product>> result;
 
             try
             {
                 result = await _productService.GetAll();
-                if (result.Data != null)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
@@ -48,7 +45,6 @@ namespace DemoBS23.API.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -62,12 +58,18 @@ namespace DemoBS23.API.Controllers
             try
             {
                 result = await _productService.GetById(id);
-                if (result.Data != null && result.Success == true)
+                if (result.Success == true)
                 {
                     return Ok(result);
                 }
 
-                return NotFound();
+                if(result.Data == null)
+                {
+                    return NotFound("Not Found!");
+                }
+                result.errorMessage = "Try again";
+                return BadRequest(result);
+                
             }
             catch (Exception ex)
             {
@@ -75,7 +77,6 @@ namespace DemoBS23.API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> AddOne(Product newProduct)
         {
@@ -89,12 +90,12 @@ namespace DemoBS23.API.Controllers
             try
             {
                 result = await _productService.AddOne(newProduct);
-                if (result.Data != null && result.Success == true)
+                if (result.Success == true)
                 {
                     return CreatedAtAction(nameof(GetById), new { id = newProduct.Id }, newProduct);
                 }
 
-                return BadRequest();
+                return BadRequest(result);
             }
             catch (Exception ex)
             {
@@ -102,7 +103,6 @@ namespace DemoBS23.API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Product updateProduct)
         {
@@ -127,7 +127,6 @@ namespace DemoBS23.API.Controllers
             }
         }
 
-        //[Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

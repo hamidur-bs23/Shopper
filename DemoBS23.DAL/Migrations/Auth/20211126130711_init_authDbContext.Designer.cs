@@ -4,14 +4,16 @@ using DemoBS23.DAL.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DemoBS23.DAL.Migrations.Auth
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211126130711_init_authDbContext")]
+    partial class init_authDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace DemoBS23.DAL.Migrations.Auth
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 11, 26, 17, 29, 29, 778, DateTimeKind.Utc).AddTicks(9308))
+                        .HasDefaultValue(new DateTime(2021, 11, 26, 13, 7, 11, 361, DateTimeKind.Utc).AddTicks(9847))
                         .HasColumnName("creation_date");
 
                     b.Property<DateTime>("ExpiryDate")
@@ -76,7 +78,6 @@ namespace DemoBS23.DAL.Migrations.Auth
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 

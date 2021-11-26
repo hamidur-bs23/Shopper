@@ -11,6 +11,7 @@ using DemoBS23.BLL.AppConfig;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace DemoBS23.BLL.Services.Auth
 {
@@ -31,12 +32,20 @@ namespace DemoBS23.BLL.Services.Auth
         {
             AuthResultSet result = new AuthResultSet();
 
+            string pattern = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+
             AuthUser authUser = new AuthUser
             {
                 UserName = model.UserName,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
+            
+            if (!Regex.IsMatch(model.Email, pattern))
+            {
+                result.Errors.Add("Invalid Email!");
+                return result;
+            }
 
             var resultFromDb = await _authRepo.RegisterAsync(authUser, model.Password);
 
