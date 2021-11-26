@@ -10,7 +10,8 @@ namespace DemoBS23.BLL.Dtos.Auth
         [Required]
         public string UserName { get; set; }
         [Required]
-        [DataType(DataType.EmailAddress)]
+        //[DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }

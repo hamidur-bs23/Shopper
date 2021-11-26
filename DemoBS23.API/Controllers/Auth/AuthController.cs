@@ -24,6 +24,11 @@ namespace DemoBS23.API.Controllers.Auth
         [HttpPost]
         public async Task<IActionResult> RegisterAsync([FromBody] AuthUserRegistrationCreateDto userToCreate)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             try
             {
                 AuthResultSet result = await _authService.RegistrationAsync(userToCreate);

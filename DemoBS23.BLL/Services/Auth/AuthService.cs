@@ -183,7 +183,7 @@ namespace DemoBS23.BLL.Services.Auth
 
                 var insertedRefreshToken = await SaveRefreshTokenAsync(refreshToken);
 
-                if (insertedRefreshToken != null)
+                if (insertedRefreshToken != null) //TODO: check (insertRefreshToken.TokenId != null) or not?
                 {
                     authResultSet.Token = jwtToken;
                     authResultSet.RefreshToken = insertedRefreshToken.RefreshToken;
