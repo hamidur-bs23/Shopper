@@ -11,8 +11,7 @@ namespace DemoBS23.BLL.Dtos
         public AutoMapperProfiles()
         {
             // Source --->  Target
-            CreateMap<Product, GetProductDto>();
-            CreateMap<PostProductDto, Product>();
+
 
         }
     }
