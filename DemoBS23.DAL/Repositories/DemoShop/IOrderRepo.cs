@@ -8,9 +8,10 @@ namespace DemoBS23.DAL.Repositories.DemoShop
 {
     public interface IOrderRepo
     {
-        //public Task<Order> AddOrders();
-        //public Task<Customer> GetCustomerById(i
+        public Task<Order> CreateOrder(Order order);
+        public Task<bool> AddOrderDetails(ICollection<OrderDetail> orderDetails);
+        public Task<bool> UpdateOrderWithTotal(Order order);
 
-        public void AddOrder(Order order);
+        
     }
 }

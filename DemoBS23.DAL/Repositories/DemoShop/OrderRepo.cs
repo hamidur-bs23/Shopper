@@ -3,6 +3,7 @@ using DemoBS23.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DemoBS23.DAL.Repositories.DemoShop
 {
@@ -14,11 +15,10 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         {
             _productDbContext = productDbContext;
         }
-        public void AddOrder(Order order)
+        /*public async Task<void> AddOrder(Order order)
         {
             _productDbContext.Orders.Add(order);
             _productDbContext.SaveChanges();
-
 
             IList<OrderDetail> orderList = new List<OrderDetail>();
             foreach(var item in order.OrderDetails)
@@ -38,17 +38,30 @@ namespace DemoBS23.DAL.Repositories.DemoShop
 
             _productDbContext.OrderDetails.AddRange(orderList);
             _productDbContext.SaveChanges();
+        }*/
+
+        public async Task<bool> AddOrderDetails(ICollection<OrderDetail> orderDetails)
+        {
+            await _productDbContext.OrderDetails.AddRangeAsync(orderDetails);
+            if( await _productDbContext.SaveChangesAsync() > 0)
+                return true;
+            return false;   
         }
 
-        public Tuple<int, int> GetPriceListOfItems(List<Tuple<int, int>> items)
+        public async Task<Order> CreateOrder(Order order)
         {
-            List<int> products = new List<int>();
-            foreach(var item in items)
-            {
-                products.Add(item.Item1);
-            };
+            await _productDbContext.Orders.AddAsync(order);
+            if(await _productDbContext.SaveChangesAsync() > 0)
+                return order;
+            return null;
+        }
 
-            _productDbContext.Products
+        public async Task<bool> UpdateOrderWithTotal(Order order)
+        {
+            _productDbContext.Orders.Update(order);
+            if (await _productDbContext.SaveChangesAsync() > 0)
+                return true;
+            return false;
         }
     }
 }

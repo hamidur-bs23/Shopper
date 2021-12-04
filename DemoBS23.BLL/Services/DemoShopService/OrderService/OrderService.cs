@@ -4,6 +4,7 @@ using DemoBS23.DAL.Repositories.DemoShop;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DemoBS23.BLL.Services.DemoShopService.OrderService
 {
@@ -15,18 +16,51 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
         {
             _orderRepo = orderRepo;
         }
-        public Order AddOrder(OrderCreateDto orderCreateDto)
+        public async Task<ResultSet<Order>> AddOrder(OrderCreateDto orderCreateDto)
         {
-            //TODO: generate OrderDetails
-            int subT = 0;
+            ResultSet<Order> resultSet = new ResultSet<Order>();
 
-            var ListOfItemsForPrice = new List<Tuple<int, int>>();
-
-            foreach(var item in orderCreateDto.ListOfItemsWithQuantity)
+            Order order = new Order
             {
-                ListOfItemsForPrice.Add(Tuple.Create(item.ProductId, -1));
+                CustomerId = orderCreateDto.CustomerId,
+                DateCreated = DateTime.Now,
+                Total = -1
+            };
+
+            await _orderRepo.CreateOrder(order);
+
+            List<OrderDetail> orderDetails = new List<OrderDetail>();
+            int CalculatedTotal = 0;
+            
+            foreach(var item in orderCreateDto.ListOfItems)
+            {
+                int subTotal = item.Quantity * item.UnitPrice;
+                CalculatedTotal += subTotal;
+
+                orderDetails.Add(new OrderDetail
+                {
+                    OrderId = order.Id,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice,
+                    SubTotal = subTotal
+                });                
             }
 
+            bool isOrderDetailsSaved = await _orderRepo.AddOrderDetails(orderDetails);
+
+            if (isOrderDetailsSaved)
+            {
+                order.Total = CalculatedTotal;
+
+                if(await _orderRepo.UpdateOrderWithTotal(order) == true)
+                {
+                    resultSet.Data = order;
+                    resultSet.Success = true;
+                }
+            }
+
+            return resultSet;
         }
     }
 }

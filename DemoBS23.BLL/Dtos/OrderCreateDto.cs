@@ -12,7 +12,7 @@ namespace DemoBS23.BLL.Dtos
         public int CustomerId { get; set; }
 
         [Required]
-        public IList<ItemWithQuantity> ListOfItemsWithQuantity { get; set; }       
+        public IList<ItemWithPriceAndQuantity> ListOfItems { get; set; }       
     }
 
     public static class OrderCreateDtoExtensions
@@ -29,11 +29,11 @@ namespace DemoBS23.BLL.Dtos
         }
     }
 
-    public class ItemWithQuantity
+    public class ItemWithPriceAndQuantity
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; }
-
+        public int UnitPrice { get; set; }
     }
 }
 

@@ -1,4 +1,5 @@
-﻿using DemoBS23.BLL.Dtos;
+﻿using DemoBS23.API.Utilities;
+using DemoBS23.BLL.Dtos;
 using DemoBS23.BLL.Services;
 using DemoBS23.BLL.Services.DemoShopService.OrderService;
 using DemoBS23.DAL.Entities;
@@ -21,7 +22,7 @@ namespace DemoBS23.API.Controllers.DemoShop
         }
 
         [HttpPost("Add")]
-        public async Task<ResultSet<ActionResult<Order>>> Add(OrderCreateDto orderCreateDto)
+        public async Task<ActionResult<ResultSet<Order>>> Add(OrderCreateDto orderCreateDto)
         {
             ResultSet<Order> resultSet = new ResultSet<Order>();
             try
