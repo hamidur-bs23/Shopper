@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿/*using AutoMapper;
 using DemoBS23.DAL.Entities;
 using DemoBS23.DAL.Repositories;
 using System;
@@ -144,3 +144,4 @@ namespace DemoBS23.BLL.Services.ProductService
         }
     }
 }
+*/

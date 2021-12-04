@@ -1,6 +1,8 @@
-using DemoBS23.BLL.Services.ProductService;
+using DemoBS23.BLL.Services.DemoShopService.CustomerService;
+using DemoBS23.BLL.Services.DemoShopService.OrderService;
+using DemoBS23.BLL.Services.DemoShopService.ProductService;
 using DemoBS23.DAL.DatabaseContext;
-using DemoBS23.DAL.Repositories;
+using DemoBS23.DAL.Repositories.DemoShop;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -56,11 +58,22 @@ namespace DemoBS23.API
             #endregion
 
             #region Repositories DI
+            //services.AddScoped<IProductRepo, ProductRepo>();
+            //services.AddScoped<IDemoShopRepo, DemoShopRepo>();
             services.AddScoped<IProductRepo, ProductRepo>();
+            services.AddScoped<ICustomerRepo, CustomerRepo>();
+            services.AddScoped<IOrderRepo, OrderRepo>();
+
             #endregion
 
             #region Services DI
+            //services.AddScoped<IProductService, ProductService>();
+            //services.AddScoped<IDemoShopService, DemoShopService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IOrderService, OrderService>();
+
+
             #endregion
 
             services.AddAutoMapper(typeof(Startup));
