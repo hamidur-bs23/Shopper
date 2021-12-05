@@ -33,7 +33,10 @@ namespace DemoBS23.DAL.Repositories.Auth
             try
             {
                 var userExist = await _userManager.FindByNameAsync(newUserToCreate.UserName);
-                if (userExist != null)
+                var userExistWithEmail = await _userManager.FindByEmailAsync(newUserToCreate.Email);
+                //TODO: checking for duplicate email entry
+                
+                if (userExist != null && userExistWithEmail != null)
                 {
                     result.Errors.Add("User already exist");
                     return result;

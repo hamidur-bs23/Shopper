@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DemoBS23.DAL.Migrations
 {
-    public partial class OrderOrder_DetailCustomerProductCategorytablescretedwithrelationships : Migration
+    public partial class InitProductDbContext : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

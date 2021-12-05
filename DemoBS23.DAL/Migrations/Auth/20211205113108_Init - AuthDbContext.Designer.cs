@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace DemoBS23.DAL.migrations.auth
+namespace DemoBS23.DAL.Migrations.Auth
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20211126162646_modify_identityAuthUser")]
-    partial class modify_identityAuthUser
+    [Migration("20211205113108_Init - AuthDbContext")]
+    partial class InitAuthDbContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,7 @@ namespace DemoBS23.DAL.migrations.auth
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 11, 26, 16, 26, 46, 399, DateTimeKind.Utc).AddTicks(8041))
+                        .HasDefaultValue(new DateTime(2021, 12, 5, 11, 31, 8, 363, DateTimeKind.Utc).AddTicks(4011))
                         .HasColumnName("creation_date");
 
                     b.Property<DateTime>("ExpiryDate")

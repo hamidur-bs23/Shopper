@@ -29,7 +29,7 @@ namespace DemoBS23.DAL.Migrations.Auth
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 11, 26, 17, 29, 29, 778, DateTimeKind.Utc).AddTicks(9308))
+                        .HasDefaultValue(new DateTime(2021, 12, 5, 11, 31, 8, 363, DateTimeKind.Utc).AddTicks(4011))
                         .HasColumnName("creation_date");
 
                     b.Property<DateTime>("ExpiryDate")

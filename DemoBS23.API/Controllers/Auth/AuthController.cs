@@ -45,7 +45,7 @@ namespace DemoBS23.API.Controllers.Auth
             }
         }
 
-        [Route("RegisterAdmin")]
+        /*[Route("RegisterAdmin")]
         [HttpPost]
         public async Task<IActionResult> RegisterAdminAsync([FromBody] AuthUserRegistrationCreateDto userToCreate)
         {
@@ -83,7 +83,7 @@ namespace DemoBS23.API.Controllers.Auth
                 throw new Exception("ERROR: ", exception);
             }
         }
-
+*/
 
         [Route("Login")]
         [HttpPost]
@@ -92,7 +92,7 @@ namespace DemoBS23.API.Controllers.Auth
             try
             {
                 AuthResultSet result = await _authService.LoginAsync(model);
-                if (result != null)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
@@ -100,12 +100,12 @@ namespace DemoBS23.API.Controllers.Auth
             }
             catch (Exception exception)
             {
-                throw new Exception("ERROR: ", exception);
+                throw new Exception("ERROR: " + exception.Message, exception);
             }
         }
 
 
-        [Route("RefreshToken")]
+        /*[Route("RefreshToken")]
         [HttpPost]
         public async Task<IActionResult> RefreshToken([FromBody] AuthRefreshTokenCreateDto model)
         {
@@ -142,6 +142,6 @@ namespace DemoBS23.API.Controllers.Auth
                 return BadRequest(result);
             }
 
-        }
+        }*/
     }
 }

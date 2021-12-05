@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoBS23.DAL.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20211202152512_Order, Order_Detail, Customer, Product, Category - tables creted with relationships")]
-    partial class OrderOrder_DetailCustomerProductCategorytablescretedwithrelationships
+    [Migration("20211205112831_Init - ProductDbContext")]
+    partial class InitProductDbContext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
