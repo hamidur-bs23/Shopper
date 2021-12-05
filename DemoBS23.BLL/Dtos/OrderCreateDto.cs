@@ -1,4 +1,5 @@
 ﻿using DemoBS23.DAL.Entities;
+using DemoBS23.DAL.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,29 +7,36 @@ using System.Text;
 
 namespace DemoBS23.BLL.Dtos
 {
-    public class OrderReadDto
+    public class OrderCreateDto
     {
-        public string CustomerName{ get; set; }
+        [Required]
+        public int CustomerId { get; set; }
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
-        public IList<ItemWithPriceAndQuantity> ListOfOrderedItems { get; set; }       
+        [Required]
+        public IList<ItemWithPriceAndQuantity> ListOfItems { get; set; }       
     }
 
-    public static class OrderReadDtoExtensions
+    public static class OrderCreateDtoExtensions
     {
-        //public static Order ToEntity(this OrderCreateDto dto)
-        //{
-            
+        public static Order ToEntity(this OrderCreateDto dto)
+        {
+            var order = new Order
+            {
+                CustomerId = dto.CustomerId,
 
-        //    return order;
-        //}
+            };
+
+            return order;
+        }
     }
 
-    public class OrderedItems
+    public class ItemWithPriceAndQuantity
     {
-        public string ProductName { get; set; }
+        public int ProductId { get; set; }
         public int Quantity { get; set; }
         public int UnitPrice { get; set; }
-        public int SubTotal { get; set; }
+        public int CurrentStock { get; set; }
     }
 }
 

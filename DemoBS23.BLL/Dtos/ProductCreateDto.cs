@@ -16,8 +16,8 @@ namespace DemoBS23.BLL.Dtos
         public int Price { get; set; }
 
         [Required]
-        [Range(0, int.MaxValue)]
-        public int Quantity { get; set; }
+        //[Range(0, int.MaxValue)]
+        public int Quantity { get; set; } = 0;
 
         [StringLength(250)]
         public string Description { get; set; }

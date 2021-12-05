@@ -1,10 +1,12 @@
 using DemoBS23.BLL.AppConfig;
+using DemoBS23.BLL.Services.Admin;
 using DemoBS23.BLL.Services.Auth;
 using DemoBS23.BLL.Services.DemoShopService.CustomerService;
 using DemoBS23.BLL.Services.DemoShopService.OrderService;
 using DemoBS23.BLL.Services.DemoShopService.ProductService;
 using DemoBS23.DAL.DatabaseContext;
 using DemoBS23.DAL.Entities.Auth;
+using DemoBS23.DAL.Repositories.Admin;
 using DemoBS23.DAL.Repositories.Auth;
 using DemoBS23.DAL.Repositories.DemoShop;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -101,6 +103,7 @@ namespace DemoBS23.API
             services.AddScoped<ICustomerRepo, CustomerRepo>();
             services.AddScoped<IOrderRepo, OrderRepo>();
             services.AddScoped<IAuthRepo, AuthRepo>();
+            services.AddScoped<IAdminRepo, AdminRepo>();
             #endregion
 
             #region Services DI
@@ -110,6 +113,7 @@ namespace DemoBS23.API
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAdminService, AdminService>();
             #endregion
 
             services.AddAutoMapper(typeof(Startup));

@@ -1,8 +1,8 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DemoBS23.BLL.Enum
+namespace DemoBS23.DAL.Enum
 {
     public enum OrderStatus
     {
@@ -11,4 +11,3 @@ namespace DemoBS23.BLL.Enum
         Delivered
     }
 }
-*/
