@@ -34,6 +34,7 @@ namespace DemoBS23.BLL.Dtos
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public int UnitPrice { get; set; }
+        public int CurrentStock { get; set; }
     }
 }
 

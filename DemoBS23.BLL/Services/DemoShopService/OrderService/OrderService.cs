@@ -31,22 +31,57 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
 
             List<OrderDetail> orderDetails = new List<OrderDetail>();
             int CalculatedTotal = 0;
-            
-            foreach(var item in orderCreateDto.ListOfItems)
+
+            List<Product> productsWithUpdatedStock = new List<Product>();
+            List<string> stockOutErrorMsg = new List<string>();
+            string er = "";
+
+            bool isStockOutAny = false;
+
+            try
             {
-                int subTotal = item.Quantity * item.UnitPrice;
-                CalculatedTotal += subTotal;
-
-                orderDetails.Add(new OrderDetail
+                foreach (var item in orderCreateDto.ListOfItems)
                 {
-                    OrderId = order.Id,
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity,
-                    UnitPrice = item.UnitPrice,
-                    SubTotal = subTotal
-                });                
-            }
+                    if (item.CurrentStock >= item.Quantity)
+                    {
+                        productsWithUpdatedStock.Add(new Product
+                        {
+                            Id = item.ProductId,
+                            Quantity = item.CurrentStock - item.Quantity
+                        });
 
+                        int subTotal = item.Quantity * item.UnitPrice;
+                        CalculatedTotal += subTotal;
+
+                        orderDetails.Add(new OrderDetail
+                        {
+                            OrderId = order.Id,
+                            ProductId = item.ProductId,
+                            Quantity = item.Quantity,
+                            UnitPrice = item.UnitPrice,
+                            SubTotal = subTotal
+                        });
+                    }
+                    else
+                    {
+                        stockOutErrorMsg.Add($"Product ({item.ProductId}): has not enough quantity!");
+                        isStockOutAny = true;
+
+                        er = er + $"Product({ item.ProductId}): has not enough quantity!";
+                    }
+                }
+                if (isStockOutAny)
+                {
+                    throw new Exception(er);
+                    //throw new Exception(stockOutErrorMsg.ToString());
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
             bool isOrderDetailsSaved = await _orderRepo.AddOrderDetails(orderDetails);
 
             if (isOrderDetailsSaved)
