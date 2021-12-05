@@ -1,5 +1,6 @@
 ﻿using DemoBS23.DAL.DatabaseContext;
 using DemoBS23.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +60,39 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         {
             var productFromDb = _productDbContext.Products.Where(x => x.Id == id).FirstOrDefault();
             return productFromDb;
+        }
+
+
+
+        public async Task<ICollection<Product>> GetAll()
+        {
+            var productsFromDb = _productDbContext.Products.Include(x => x.Category).ToList();
+
+            return productsFromDb;
+        }
+
+        public async Task<Product> Update(Product updateProduct)
+        {
+            Product updatedProduct = _productDbContext.Products.Update(updateProduct).Entity;
+            await _productDbContext.SaveChangesAsync();
+
+            Product updatedProductWithCategory = _productDbContext.Products.Where(x => x.Id == updatedProduct.Id).Include(x => x.Category).FirstOrDefault();
+
+            return updatedProductWithCategory;
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            var productFromDb = await GetProductById(id);
+            if(productFromDb != null)
+            {
+                _productDbContext.Products.Remove(productFromDb);
+                if(await _productDbContext.SaveChangesAsync() > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

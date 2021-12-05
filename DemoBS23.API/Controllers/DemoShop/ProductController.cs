@@ -3,12 +3,15 @@ using DemoBS23.BLL.Dtos;
 using DemoBS23.BLL.Services;
 using DemoBS23.BLL.Services.DemoShopService.ProductService;
 using DemoBS23.DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DemoBS23.API.Controllers.DemoShop
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
@@ -42,7 +45,7 @@ namespace DemoBS23.API.Controllers.DemoShop
         }
         
        
-        [HttpGet("Category/GetById{id}")]
+        [HttpGet("Category/Get/{id}")]
         public async Task<ActionResult<ResultSet<Category>>> GetCategoryById(int id)
         {
             ResultSet<Category> resultSet = new ResultSet<Category>();
@@ -90,7 +93,7 @@ namespace DemoBS23.API.Controllers.DemoShop
             }
         }
 
-        [HttpGet("GetById{id}")]
+        [HttpGet("Get/{id}")]
         public async Task<ActionResult<ResultSet<Product>>> GetProductById(int id)
         {
             ResultSet<Product> resultSet = new ResultSet<Product>();
@@ -115,5 +118,75 @@ namespace DemoBS23.API.Controllers.DemoShop
                 return BadRequest(ex.AppExceptionHandler());
             }
         }
+
+
+
+        [AllowAnonymous]
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<ResultSet<ICollection<ProductReadDto>>>> GetAll()
+        {
+            ResultSet<ICollection<ProductReadDto>> resultSet = new ResultSet<ICollection<ProductReadDto>>();
+            try
+            {
+                resultSet = await _productService.GetAll();
+
+                if (resultSet.Data == null || resultSet.Success == false)
+                {
+                    return NotFound();
+                }
+
+                return Ok(resultSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
+        }
+
+
+        [HttpPut("Update/{id}")]
+        public async Task<ActionResult<ResultSet<ProductReadDto>>> Update(int id, ProductCreateDto updateProduct)
+        {
+            ResultSet<ProductReadDto> resultSet = new ResultSet<ProductReadDto>();
+            try
+            {
+                resultSet = await _productService.Update(id, updateProduct);
+
+                if (resultSet.Success == false)
+                {
+                    return NotFound();
+                }
+
+                return Ok(resultSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
+        }
+
+
+        [HttpDelete("Delete/{id}")]
+        public async Task<ActionResult<ResultSet<bool>>> Delete(int id)
+        {
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            try
+            {
+                resultSet = await _productService.Delete(id);
+
+                if (resultSet.Success == false)
+                {
+                    return NotFound();
+                }
+
+                return Ok(resultSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
+
+        } 
+
     }
 }

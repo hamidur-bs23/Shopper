@@ -1,5 +1,6 @@
 ﻿using DemoBS23.DAL.DatabaseContext;
 using DemoBS23.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace DemoBS23.DAL.Repositories.DemoShop
 
         public async Task<Customer> GetCustomerById(int id)
         {
-            var customerFromDb = _productDbContext.Customers.Where(x => x.Id == id).FirstOrDefault();
+            var customerFromDb = _productDbContext.Customers.Where(x => x.Id == id).Include(x=>x.Orders).FirstOrDefault();
 
             return customerFromDb;
         }

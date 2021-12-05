@@ -10,6 +10,7 @@ namespace DemoBS23.DAL.Entities
         public DateTime DateCreated { get; set; }
         public int Total { get; set; }
 
+        //public int? Status { get; set; }
 
 
         public int CustomerId { get; set; }

@@ -43,7 +43,7 @@ namespace DemoBS23.API.Controllers.DemoShop
         }
 
 
-        [HttpGet("GetById{id}")]
+        [HttpGet("Get/{id}")]
         public async Task<ActionResult<ResultSet<Customer>>> GetCustomerById(int id)
         {
             ResultSet<Customer> resultSet = new ResultSet<Customer>();

@@ -97,5 +97,20 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
 
             return resultSet;
         }
+
+        public async Task<ResultSet<Order>> GetbyOrderId(int id)
+        {
+            ResultSet<Order> resultSet = new ResultSet<Order>();
+
+            var data = await _orderRepo.GetbyOrderId(id);
+
+            if(data != null)
+            {
+                resultSet.Data = data;
+                resultSet.Success = true;
+            }
+
+            return resultSet;
+        }
     }
 }
