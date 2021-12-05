@@ -15,5 +15,8 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         public Task<Product> AddProduct(Product product);
         public Task<Product> GetProductById(int id);
 
+        public Task<ICollection<Product>> GetAll();
+        public Task<Product> Update(Product updateProduct);
+        public Task<bool> Delete(int id);
     }
 }

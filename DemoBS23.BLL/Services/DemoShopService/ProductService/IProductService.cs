@@ -15,5 +15,12 @@ namespace DemoBS23.BLL.Services.DemoShopService.ProductService
 
         public Task<ResultSet<Product>> AddProduct(ProductCreateDto productCreateDto);
         public Task<ResultSet<Product>> GetProductById(int id);
+
+
+        public Task<ResultSet<ICollection<ProductReadDto>>> GetAll();
+
+        public Task<ResultSet<ProductReadDto>> Update(int id, ProductCreateDto updateProduct);
+
+        public Task<ResultSet<bool>> Delete(int id);
     }
 }

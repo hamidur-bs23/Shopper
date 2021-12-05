@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace DemoBS23.API.Controllers.DemoShop
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -28,6 +29,28 @@ namespace DemoBS23.API.Controllers.DemoShop
             try
             {
                 resultSet = await _orderService.AddOrder(orderCreateDto);
+
+                if (!resultSet.Success)
+                {
+                    throw new Exception("Failed!");
+                }
+
+                return Ok(resultSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
+
+        }
+
+        [HttpGet("Get/{id}")]
+        public async Task<ActionResult<ResultSet<Order>>> GetbyOrderId(int id)
+        {
+            ResultSet<Order> resultSet = new ResultSet<Order>();
+            try
+            {
+                resultSet = await _orderService.GetbyOrderId(id);
 
                 if (!resultSet.Success)
                 {

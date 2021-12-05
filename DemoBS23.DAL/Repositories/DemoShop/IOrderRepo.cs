@@ -12,6 +12,7 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         public Task<bool> AddOrderDetails(ICollection<OrderDetail> orderDetails);
         public Task<bool> UpdateOrderWithTotal(Order order);
 
+        public Task<Order> GetbyOrderId(int id);
         
     }
 }

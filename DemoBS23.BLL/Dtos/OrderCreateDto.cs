@@ -6,35 +6,29 @@ using System.Text;
 
 namespace DemoBS23.BLL.Dtos
 {
-    public class OrderCreateDto
+    public class OrderReadDto
     {
-        [Required]
-        public int CustomerId { get; set; }
+        public string CustomerName{ get; set; }
 
-        [Required]
-        public IList<ItemWithPriceAndQuantity> ListOfItems { get; set; }       
+        public IList<ItemWithPriceAndQuantity> ListOfOrderedItems { get; set; }       
     }
 
-    public static class OrderCreateDtoExtensions
+    public static class OrderReadDtoExtensions
     {
-        public static Order ToEntity(this OrderCreateDto dto)
-        {
-            var order = new Order
-            {
-                CustomerId = dto.CustomerId,
+        //public static Order ToEntity(this OrderCreateDto dto)
+        //{
+            
 
-            };
-
-            return order;
-        }
+        //    return order;
+        //}
     }
 
-    public class ItemWithPriceAndQuantity
+    public class OrderedItems
     {
-        public int ProductId { get; set; }
+        public string ProductName { get; set; }
         public int Quantity { get; set; }
         public int UnitPrice { get; set; }
-        public int CurrentStock { get; set; }
+        public int SubTotal { get; set; }
     }
 }
 

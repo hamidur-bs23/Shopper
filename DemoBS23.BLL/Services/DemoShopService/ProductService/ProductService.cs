@@ -3,6 +3,7 @@ using DemoBS23.DAL.Entities;
 using DemoBS23.DAL.Repositories.DemoShop;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,6 +77,104 @@ namespace DemoBS23.BLL.Services.DemoShopService.ProductService
             if (resultSet.Data != null)
             {
                 resultSet.Success = true;
+            }
+
+            return resultSet;
+        }
+
+
+        public async Task<ResultSet<ICollection<ProductReadDto>>> GetAll()
+        {
+            ResultSet<ICollection<ProductReadDto>> resultSet = new ResultSet<ICollection<ProductReadDto>>();
+
+            var fromDb = await _productRepo.GetAll();
+
+            var data = fromDb.Select(x => x.ToEntity()).ToList();
+            resultSet.Data = data;
+
+            if (resultSet.Data != null)
+            {
+                resultSet.Success = true;
+            }
+
+            return resultSet;
+        }
+
+
+        public async Task<ResultSet<ProductReadDto>> Update(int id, ProductCreateDto updateProduct)
+        {
+            ResultSet<ProductReadDto> resultSet = new ResultSet<ProductReadDto>();
+            try
+            {
+                Product existedProduct = await _productRepo.GetProductById(id);
+                if (existedProduct == null)
+                {
+                    resultSet.errorMessage = "Something wrong to find the desired product for update!";
+                    return resultSet;
+                }
+
+                existedProduct.Name = updateProduct.Name;
+                existedProduct.Price = updateProduct.Price;
+                existedProduct.Quantity = updateProduct.Quantity;
+                existedProduct.Description = updateProduct.Description;
+                existedProduct.CategoryId = updateProduct.CategoryId;
+
+                try
+                {
+                    var updatedProduct = await _productRepo.Update(existedProduct);
+                    if(updatedProduct != null)
+                    {
+                        ProductReadDto data = new ProductReadDto
+                        {
+
+                        };
+                        resultSet.Data = updatedProduct.ToEntity();
+                        resultSet.Success = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultSet.errorMessage = ex.Message;
+                return resultSet;
+            }
+
+            return resultSet;
+        }
+
+        public async Task<ResultSet<bool>> Delete(int id)
+        {
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            try
+            {
+                Product existedProduct = await _productRepo.GetProductById(id);
+                if (existedProduct == null)
+                {
+                    resultSet.errorMessage = "No product exists";
+                    return resultSet;
+                }
+
+                try
+                {
+                    var isDeleted = await _productRepo.Delete(id);
+                    if(isDeleted == true)
+                    {
+                        resultSet.Success = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultSet.errorMessage = ex.Message;
+                return resultSet;
             }
 
             return resultSet;

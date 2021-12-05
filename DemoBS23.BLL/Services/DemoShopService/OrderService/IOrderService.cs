@@ -10,5 +10,6 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
     public interface IOrderService
     {
         public Task<ResultSet<Order>> AddOrder(OrderCreateDto orderCreateDto);
+        public Task<ResultSet<Order>> GetbyOrderId(int id);
     }
 }
