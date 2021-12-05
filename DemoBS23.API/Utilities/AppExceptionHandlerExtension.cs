@@ -8,7 +8,9 @@ namespace DemoBS23.API.Utilities
     {
         public static IList<string> AppExceptionHandler(this Exception ex)
         {
-            IList<string> ErrorMessages = new List<string>() { ex.StackTrace };
+            IList<string> ErrorMessages = new List<string>();
+            //ErrorMessages.Add(ex.StackTrace);
+            ErrorMessages.Add(ex.Message);
 
             if (ex != null)
             {

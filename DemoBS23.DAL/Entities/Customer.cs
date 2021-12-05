@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DemoBS23.DAL.Entities
 {
-    public class Category
+    public class Customer
     {
-        
+        //[Key]
         public int Id { get; set; }
+     
+        //[Required]
         public string Name { get; set; }
+        
+        //[Required]
+        public string ContactNumber { get; set; }
 
-        public ICollection<Product> Products { get; set; }
+
+
+        public ICollection<Order> Orders { get; set; }
+
+
     }
 }

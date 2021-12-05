@@ -7,12 +7,29 @@ namespace DemoBS23.DAL.Entities
 {
     public class Product
     {
-        [Key]
+        //[Key]
         public int Id { get; set; }
-        [Required]
-        [StringLength(250, ErrorMessage = "length should be 3 to 250 characters!", MinimumLength = 3)]
+
+        //[Required]
+        //[StringLength(250, ErrorMessage = "length should be 3 to 250 characters!", MinimumLength = 3)]
         public string Name { get; set; }
-        [Required]       
+
+        //[Required]       
         public int Price { get; set; }
+
+        //[Required]
+        //[Range(0, int.MaxValue)]
+        public int Quantity { get; set; }
+
+        
+        public string Description { get; set; }
+
+
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+
+
+        public ICollection<OrderDetail> OrderDetails { get; set; }
+
     }
 }

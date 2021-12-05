@@ -1,29 +1,26 @@
 using DemoBS23.BLL.AppConfig;
 using DemoBS23.BLL.Services.Auth;
-using DemoBS23.BLL.Services.ProductService;
+using DemoBS23.BLL.Services.DemoShopService.CustomerService;
+using DemoBS23.BLL.Services.DemoShopService.OrderService;
+using DemoBS23.BLL.Services.DemoShopService.ProductService;
 using DemoBS23.DAL.DatabaseContext;
 using DemoBS23.DAL.Entities.Auth;
-using DemoBS23.DAL.Repositories;
 using DemoBS23.DAL.Repositories.Auth;
+using DemoBS23.DAL.Repositories.DemoShop;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DemoBS23.API
 {
@@ -61,8 +58,13 @@ namespace DemoBS23.API
             services.AddSingleton(tokenValidationParams);
             #endregion
 
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
 
-            services.AddControllers();
             services.AddSwaggerGen(options =>
             {
                 var currentVersion = Configuration.GetValue<string>("ApiVersion:currentVersion");
@@ -93,12 +95,20 @@ namespace DemoBS23.API
             #endregion
 
             #region Repositories DI
+            //services.AddScoped<IProductRepo, ProductRepo>();
+            //services.AddScoped<IDemoShopRepo, DemoShopRepo>();
             services.AddScoped<IProductRepo, ProductRepo>();
+            services.AddScoped<ICustomerRepo, CustomerRepo>();
+            services.AddScoped<IOrderRepo, OrderRepo>();
             services.AddScoped<IAuthRepo, AuthRepo>();
             #endregion
 
             #region Services DI
+            //services.AddScoped<IProductService, ProductService>();
+            //services.AddScoped<IDemoShopService, DemoShopService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAuthService, AuthService>();
             #endregion
 

@@ -1,4 +1,4 @@
-﻿using DemoBS23.DAL.DatabaseContext;
+﻿/*using DemoBS23.DAL.DatabaseContext;
 using DemoBS23.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -101,3 +101,4 @@ namespace DemoBS23.DAL.Repositories
         }
     }
 }
+*/
