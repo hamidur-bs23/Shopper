@@ -98,18 +98,27 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
             return resultSet;
         }
 
-        public async Task<ResultSet<Order>> GetbyOrderId(int id)
+        public async Task<ResultSet<OrderReadDto>> GetbyOrderId(int id)
         {
-            ResultSet<Order> resultSet = new ResultSet<Order>();
+            ResultSet<OrderReadDto> resultSet = new ResultSet<OrderReadDto>();
 
-            var data = await _orderRepo.GetbyOrderId(id);
+            var dataFromDb = await _orderRepo.GetbyOrderId(id);
 
-            if(data != null)
+            try
             {
-                resultSet.Data = data;
-                resultSet.Success = true;
+                OrderReadDto data = dataFromDb.ToReadDto();
+                if (data != null)
+                {
+                    resultSet.Data = data;
+                    resultSet.Success = true;
+                }
             }
+            catch (Exception)
+            {
 
+                throw;
+            }
+                       
             return resultSet;
         }
     }

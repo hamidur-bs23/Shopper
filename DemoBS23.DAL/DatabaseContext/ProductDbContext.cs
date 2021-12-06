@@ -65,6 +65,9 @@ namespace DemoBS23.DAL.DatabaseContext
                 entity.Property<DateTime>(e => e.DateCreated).HasDefaultValueSql("getdate()");
                 entity.Property<int>(e => e.Total).IsRequired();
 
+                /*entity.Property<DateTime>(e => e.DateCreated)
+                    .HasConversion(a=>a, v=> DateTime.SpecifyKind(v, DateTimeKind.Utc));   */             
+
                 entity.HasOne<Customer>(o => o.Customer)
                     .WithMany(c => c.Orders)
                     .HasForeignKey(o => o.CustomerId)

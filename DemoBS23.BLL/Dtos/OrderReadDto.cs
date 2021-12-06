@@ -1,31 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using DemoBS23.BLL.Utils;
+using DemoBS23.DAL.Entities;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace DemoBS23.BLL.Dtos
 {
     public class OrderReadDto
     {
         public string CustomerName{ get; set; }
-        //public OrderStatus Status { get; set; } = OrderStatus.Pending;
+        public string Status { get; set; }
+        public string CreatedTime { get; set; }
 
-        public IList<ItemWithPriceAndQuantity> ListOfOrderedItems { get; set; }       
+        public ICollection<OrderDetailsReadDto> OrderedItems { get; set; }       
     }
 
     public static class OrderReadDtoExtensions
     {
-        //public static Order ToEntity(this OrderCreateDto dto)
-        //{
-            
+        public static OrderReadDto ToReadDto(this Order model)
+        {
+            OrderReadDto dto = new OrderReadDto()
+            {
+                CustomerName = model.Customer.Name != null ? model.Customer.Name : string.Empty,
+                Status = model.Status.ToString(),
+                //CreatedTime = model.DateCreated.ToString("g", CultureInfo.CreateSpecificCulture("en-US")),
+                CreatedTime = model.DateCreated.ToString(),
 
-        //    return order;
-        //}
-    }
+                OrderedItems = model.OrderDetails.Select(model => model.ToReadDto()).ToList()
+            };
 
-    public class OrderedItems
-    {
-        public string ProductName { get; set; }
-        public int Quantity { get; set; }
-        public int UnitPrice { get; set; }
-        public int SubTotal { get; set; }
+            return dto;
+        }
     }
 }
 
