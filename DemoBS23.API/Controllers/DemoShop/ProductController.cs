@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DemoBS23.API.Controllers.DemoShop
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase

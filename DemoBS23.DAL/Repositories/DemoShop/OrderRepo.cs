@@ -60,7 +60,19 @@ namespace DemoBS23.DAL.Repositories.DemoShop
 
         public async Task<Order> GetbyOrderId(int id)
         {
-            var order = _productDbContext.Orders.Where(x=>x.Id == id).Include(x => x.OrderDetails).FirstOrDefault();
+            /*var order = _productDbContext.Orders
+                .Where(x=>x.Id == id)
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(y=>y.Product)
+                .Include(x=>x.Customer)
+                .FirstOrDefault();*/
+            var order = _productDbContext.Orders.Where(x => x.Id == id)
+                    .Include(x => x.Customer)
+                    .Include(x => x.OrderDetails)
+                        .ThenInclude(y => y.Product)
+                        .ThenInclude(z => z.Category)
+                    .FirstOrDefault();
+
             return order;
         }
 

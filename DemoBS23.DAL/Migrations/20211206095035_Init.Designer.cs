@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoBS23.DAL.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20211205112831_Init - ProductDbContext")]
-    partial class InitProductDbContext
+    [Migration("20211206095035_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,6 +74,9 @@ namespace DemoBS23.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
 
                     b.Property<int>("Total")
                         .HasColumnType("int");

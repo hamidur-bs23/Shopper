@@ -35,7 +35,7 @@ namespace DemoBS23.DAL.Repositories.DemoShop
 
         public async Task<Category> GetCategoryById(int id)
         {
-            var categoryFromDb = _productDbContext.Categories.Where(x => x.Id == id).FirstOrDefault();
+            var categoryFromDb = _productDbContext.Categories.Include(x=>x.Products).Where(x => x.Id == id).FirstOrDefault();
             return categoryFromDb;
         }
 

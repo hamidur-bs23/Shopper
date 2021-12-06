@@ -47,7 +47,7 @@ namespace DemoBS23.API.Controllers.DemoShop
         [HttpGet("Get/{id}")]
         public async Task<ActionResult<ResultSet<Order>>> GetbyOrderId(int id)
         {
-            ResultSet<Order> resultSet = new ResultSet<Order>();
+            ResultSet<OrderReadDto> resultSet = new ResultSet<OrderReadDto>();
             try
             {
                 resultSet = await _orderService.GetbyOrderId(id);

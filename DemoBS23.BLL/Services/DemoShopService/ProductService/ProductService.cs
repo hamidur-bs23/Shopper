@@ -40,7 +40,7 @@ namespace DemoBS23.BLL.Services.DemoShopService.ProductService
 
             resultSet.Data = await _productRepo.GetCategoryById(id);
 
-            if (resultSet.Data != null)
+            if (resultSet != null)
             {
                 resultSet.Success = true;
             }
