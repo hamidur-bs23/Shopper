@@ -104,22 +104,24 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
 
             var dataFromDb = await _orderRepo.GetbyOrderId(id);
 
-            try
+            if(dataFromDb != null)
             {
-                OrderReadDto data = dataFromDb.ToReadDto();
-                if (data != null)
+                try
                 {
-                    resultSet.Data = data;
-                    resultSet.Success = true;
+                    OrderReadDto data = dataFromDb.ToReadDto();
+                    if (data != null)
+                    {
+                        resultSet.Data = data;
+                        resultSet.Success = true;
+                    }
                 }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }            
                        
-            return resultSet;
+            return null;
         }
     }
 }

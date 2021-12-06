@@ -52,6 +52,11 @@ namespace DemoBS23.API.Controllers.DemoShop
             {
                 resultSet = await _orderService.GetbyOrderId(id);
 
+                if(resultSet == null)
+                {
+                    return NotFound();
+                }
+
                 if (!resultSet.Success)
                 {
                     throw new Exception("Failed!");
