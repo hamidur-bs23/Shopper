@@ -70,7 +70,7 @@ namespace DemoBS23.DAL.Repositories.DemoShop
                     .Include(x => x.Customer)
                     .Include(x => x.OrderDetails)
                         .ThenInclude(y => y.Product)
-                        .ThenInclude(z => z.Category)
+                            .ThenInclude(z => z.Category)
                     .FirstOrDefault();
 
             return order;

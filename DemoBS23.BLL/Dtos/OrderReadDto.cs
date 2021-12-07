@@ -24,7 +24,7 @@ namespace DemoBS23.BLL.Dtos
                 //CreatedTime = model.DateCreated.ToString("g", CultureInfo.CreateSpecificCulture("en-US")),
                 CreatedTime = model.DateCreated.ToString(),
 
-                OrderedItems = model.OrderDetails.Select(model => model.ToReadDto()).ToList()
+                OrderedItems = model.OrderDetails.Select(orderDetail => orderDetail.ToReadDto()).ToList()
             };
 
             return dto;

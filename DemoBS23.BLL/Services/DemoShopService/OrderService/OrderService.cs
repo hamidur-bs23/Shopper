@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DemoBS23.BLL.Services.DemoShopService.OrderService
 {
@@ -20,79 +21,99 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
         {
             ResultSet<Order> resultSet = new ResultSet<Order>();
 
+            //TODO: mapping extension?
             Order order = new Order
             {
                 CustomerId = orderCreateDto.CustomerId,
                 DateCreated = DateTime.Now,
-                Total = -1
+                Total = -1,
+                //Status = OrderCreateDto.Status
             };
-
-            await _orderRepo.CreateOrder(order);
-
-            List<OrderDetail> orderDetails = new List<OrderDetail>();
-            int CalculatedTotal = 0;
-
-            List<Product> productsWithUpdatedStock = new List<Product>();
-            List<string> stockOutErrorMsg = new List<string>();
-            string er = "";
-
-            bool isStockOutAny = false;
 
             try
             {
-                foreach (var item in orderCreateDto.ListOfItems)
+                using(var transactionScope = new TransactionScope())
                 {
-                    if (item.CurrentStock >= item.Quantity)
+                    await _orderRepo.CreateOrder(order);
+
+                    List<OrderDetail> orderDetails = new List<OrderDetail>();
+                    int CalculatedTotal = 0;
+
+                    List<Product> productsWithUpdatedStock = new List<Product>();
+                    //List<string> stockOutErrorMsg = new List<string>();
+                    string er = "";
+
+                    bool isStockOutAny = false;
+
+                    try
                     {
-                        productsWithUpdatedStock.Add(new Product
+                        foreach (var item in orderCreateDto.ListOfItems)
                         {
-                            Id = item.ProductId,
-                            Quantity = item.CurrentStock - item.Quantity
-                        });
+                            if (item.CurrentStock >= item.Quantity)
+                            {
+                                //TODO: mapping Extension?
+                                productsWithUpdatedStock.Add(new Product
+                                {
+                                    Id = item.ProductId,
+                                    Quantity = item.CurrentStock - item.Quantity
+                                });
 
-                        int subTotal = item.Quantity * item.UnitPrice;
-                        CalculatedTotal += subTotal;
+                                int subTotal = item.Quantity * item.UnitPrice;
+                                CalculatedTotal += subTotal;
 
-                        orderDetails.Add(new OrderDetail
+                                orderDetails.Add(new OrderDetail
+                                {
+                                    OrderId = order.Id,
+                                    ProductId = item.ProductId,
+                                    Quantity = item.Quantity,
+                                    UnitPrice = item.UnitPrice,
+                                    SubTotal = subTotal
+                                });
+                            }
+                            else
+                            {
+                                //stockOutErrorMsg.Add($"Product ({item.ProductId}): has not enough quantity!");
+                                isStockOutAny = true;
+
+                                er = er + $"Product({ item.ProductId}): has not enough quantity!";
+                            }
+                        }
+                        
+                        if (isStockOutAny)
                         {
-                            OrderId = order.Id,
-                            ProductId = item.ProductId,
-                            Quantity = item.Quantity,
-                            UnitPrice = item.UnitPrice,
-                            SubTotal = subTotal
-                        });
+                            throw new Exception(er);
+                            //throw new Exception(stockOutErrorMsg.ToString());
+                        }
+
                     }
-                    else
+                    catch (Exception)
                     {
-                        stockOutErrorMsg.Add($"Product ({item.ProductId}): has not enough quantity!");
-                        isStockOutAny = true;
-
-                        er = er + $"Product({ item.ProductId}): has not enough quantity!";
+                        throw;
                     }
-                }
-                if (isStockOutAny)
-                {
-                    throw new Exception(er);
-                    //throw new Exception(stockOutErrorMsg.ToString());
-                }
 
+                    bool isOrderDetailsSaved = await _orderRepo.AddOrderDetails(orderDetails);
+
+                    if (isOrderDetailsSaved)
+                    {
+                        order.Total = CalculatedTotal;
+
+                        if (await _orderRepo.UpdateOrderWithTotal(order) == true)
+                        {
+                            resultSet.Data = order;
+                            resultSet.Success = true;
+                        }
+                    }
+
+                    transactionScope.Complete();
+                }
+            }
+            catch (TransactionAbortedException)
+            {
+                throw;
             }
             catch (Exception)
             {
                 throw;
-            }
-            
-            bool isOrderDetailsSaved = await _orderRepo.AddOrderDetails(orderDetails);
-
-            if (isOrderDetailsSaved)
-            {
-                order.Total = CalculatedTotal;
-
-                if(await _orderRepo.UpdateOrderWithTotal(order) == true)
-                {
-                    resultSet.Data = order;
-                    resultSet.Success = true;
-                }
             }
 
             return resultSet;
