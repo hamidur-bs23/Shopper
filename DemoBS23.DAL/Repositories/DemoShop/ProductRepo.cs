@@ -66,6 +66,7 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         {
             var data = _productDbContext.Products
                 .Where(e => listOfIds.Contains(e.Id))
+                .Include(e=>e.Category)
                 .Distinct()
                 .ToList();
 

@@ -19,7 +19,7 @@ namespace DemoBS23.DAL.Entities
         public Customer Customer { get; set; }
 
 
-        public IList<OrderDetail> OrderDetails { get; set; }
+        public IList<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
 
 

@@ -1,14 +1,12 @@
 ﻿using DemoBS23.DAL.Entities;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace DemoBS23.BLL.Dtos
 {
     public class OrderDetailReadDto
     {
         public string ProductName { get; set; }
+        public string CategoryName { get; set; }
         public int Quantity { get; set; }
         public int UnitPrice { get; set; }
         public int SubTotal { get; set; }
@@ -16,8 +14,8 @@ namespace DemoBS23.BLL.Dtos
 
     public class OrderDetailCreateDto
     {
-        [Required]
-        public int OrderId { get; set; }
+        //[Required]
+        //public int OrderId { get; set; }
 
         [Required] 
         public int ProductId { get; set; }
@@ -25,8 +23,8 @@ namespace DemoBS23.BLL.Dtos
         [Required] 
         public int Quantity { get; set; }
 
-        public int UnitPrice { get; set; }
-        public int SubTotal { get; set; }
+        //public int UnitPrice { get; set; }
+        //public int SubTotal { get; set; }
     }
 
 
@@ -37,6 +35,7 @@ namespace DemoBS23.BLL.Dtos
             var dto = new OrderDetailReadDto()
             {
                 ProductName = model.Product.Name != null ? model.Product.Name : string.Empty,
+                CategoryName = model.Product.Category.Name != null ? model.Product.Category.Name : string.Empty,
                 Quantity = model.Quantity,
                 UnitPrice = model.UnitPrice,
                 SubTotal = model.SubTotal
@@ -49,11 +48,8 @@ namespace DemoBS23.BLL.Dtos
         {
             var model = new OrderDetail
             {
-                OrderId = dto.OrderId,
                 ProductId = dto.ProductId,
                 Quantity = dto.Quantity,
-                UnitPrice = dto.UnitPrice,
-                SubTotal = dto.Quantity * dto.UnitPrice
             };
 
             return model;

@@ -30,7 +30,10 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         {
             await _productDbContext.Orders.AddAsync(order);
             if(await _productDbContext.SaveChangesAsync() > 0)
+            {
+                order = _productDbContext.Orders.Where(e => e.Id == order.Id).Include(e => e.Customer).FirstOrDefault();
                 return order;
+            }
             return null;
         }
 
@@ -49,9 +52,6 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         public async Task<bool> UpdateOrderWithTotal(Order order)
         {
             _productDbContext.Orders.Update(order);
-            /*if (await _productDbContext.SaveChangesAsync() > 0)
-                return true;
-            return false;*/
             //TODO: how to check if the data saved/modified?
             await _productDbContext.SaveChangesAsync();
             return true;

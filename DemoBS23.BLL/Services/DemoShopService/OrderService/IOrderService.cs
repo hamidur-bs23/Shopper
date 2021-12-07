@@ -9,7 +9,7 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
 {
     public interface IOrderService
     {
-        public Task<ResultSet<Order>> AddOrder(OrderCreateDto orderCreateDto);
+        public Task<ResultSet<OrderReadDto>> AddOrder(OrderCreateDto orderCreateDto);
         public Task<ResultSet<OrderReadDto>> GetbyOrderId(int id);
     }
 }

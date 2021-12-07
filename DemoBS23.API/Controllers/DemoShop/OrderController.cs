@@ -23,9 +23,9 @@ namespace DemoBS23.API.Controllers.DemoShop
         }
 
         [HttpPost("Add")]
-        public async Task<ActionResult<ResultSet<Order>>> Add(OrderCreateDto orderCreateDto)
+        public async Task<ActionResult<ResultSet<OrderReadDto>>> Add(OrderCreateDto orderCreateDto)
         {
-            ResultSet<Order> resultSet = new ResultSet<Order>();
+            var resultSet = new ResultSet<OrderReadDto>();
             try
             {
                 resultSet = await _orderService.AddOrder(orderCreateDto);

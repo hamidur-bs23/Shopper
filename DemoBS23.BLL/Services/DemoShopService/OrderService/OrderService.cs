@@ -20,9 +20,9 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
             _orderRepo = orderRepo;
             _productRepo = productRepo;
         }
-        public async Task<ResultSet<Order>> AddOrder(OrderCreateDto orderCreateDto)
+        public async Task<ResultSet<OrderReadDto>> AddOrder(OrderCreateDto orderCreateDto)
         {
-            ResultSet<Order> resultSet = new ResultSet<Order>();
+            var resultSet = new ResultSet<OrderReadDto>();
 
             Order order = orderCreateDto.ToEntity();
 
@@ -43,13 +43,17 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
                         var selecteProductIds = new List<int>();
                         foreach (var item in orderCreateDto.ListOfItems)
                         {
-                            selecteProductIds.Add(item.ProductId);
+                            if (selecteProductIds.Contains(item.ProductId) == false)
+                            {
+                                selecteProductIds.Add(item.ProductId);
+                            }
                         }
 
                         var selectedProducts = await _productRepo.GetProductsByListOfIds(selecteProductIds);
 
                         try
                         {
+                            var onlyDistinctItems = new List<int>();
                             foreach (var item in orderCreateDto.ListOfItems)
                             {
                                 var productFromDb = selectedProducts.Where(e => e.Id == item.ProductId).FirstOrDefault();
@@ -58,17 +62,22 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
                                 {
                                     productFromDb.StockInHand -= item.Quantity;
 
-                                    item.SubTotal = productFromDb.Price * item.Quantity;
-                                    CalculatedTotal += item.SubTotal;
+                                    var subTotal = productFromDb.Price * item.Quantity;
+                                    CalculatedTotal += subTotal;
 
-                                    orderDetails.Add(item.ToEntity());
+                                    var newOrderDetail = item.ToEntity();
+                                    newOrderDetail.SubTotal = subTotal;
+                                    newOrderDetail.OrderId = order.Id;
+                                    newOrderDetail.UnitPrice = productFromDb.Price;
+                                    orderDetails.Add(newOrderDetail);
                                 }
                                 else
                                 {
                                     isStockOutAny = true;
 
-                                    errorMsgsForStockOutAny += $"Product({ item.ProductId}): has not enough quantity!";
+                                    errorMsgsForStockOutAny += $"Product [ Id = {item.ProductId} ] has not enough quantity!  ";
                                 }
+
                             }
 
                             if (isStockOutAny)
@@ -89,7 +98,17 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
 
                             if (await _orderRepo.UpdateOrderWithTotal(order) == true)
                             {
-                                resultSet.Data = order;
+                                var data = new OrderReadDto();
+                                try
+                                {
+                                    data = order.ToReadDto();
+                                }
+                                catch (Exception)
+                                {
+                                    throw;
+                                }
+
+                                resultSet.Data = data;
                                 resultSet.Success = true;
                             }
                         }
