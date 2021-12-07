@@ -15,14 +15,14 @@ namespace DemoBS23.BLL.Dtos
 
     public static class OrderDetailsReadDtoExtensions
     {
-        public static OrderDetailsReadDto ToReadDto(this OrderDetail soure)
+        public static OrderDetailsReadDto ToReadDto(this OrderDetail model)
         {
             var dto = new OrderDetailsReadDto()
             {
-                ProductName = soure.Product.Name != null ? soure.Product.Name : string.Empty,
-                Quantity = soure.Quantity,
-                UnitPrice = soure.UnitPrice,
-                SubTotal = soure.SubTotal
+                ProductName = model.Product.Name != null ? model.Product.Name : string.Empty,
+                Quantity = model.Quantity,
+                UnitPrice = model.UnitPrice,
+                SubTotal = model.SubTotal
             };
 
             return dto;

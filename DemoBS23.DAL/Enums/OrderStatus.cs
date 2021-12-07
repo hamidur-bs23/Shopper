@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DemoBS23.DAL.Enum
+namespace DemoBS23.DAL.Enums
 {
     public enum OrderStatus
     {

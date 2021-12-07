@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace DemoBS23.BLL.Services.DemoShopService.OrderService
 {
@@ -20,79 +21,108 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
         {
             ResultSet<Order> resultSet = new ResultSet<Order>();
 
+            //TODO: mapping extension?
             Order order = new Order
             {
                 CustomerId = orderCreateDto.CustomerId,
                 DateCreated = DateTime.Now,
-                Total = -1
+                Total = 0,
+                Status = orderCreateDto.Status
             };
-
-            await _orderRepo.CreateOrder(order);
-
-            List<OrderDetail> orderDetails = new List<OrderDetail>();
-            int CalculatedTotal = 0;
-
-            List<Product> productsWithUpdatedStock = new List<Product>();
-            List<string> stockOutErrorMsg = new List<string>();
-            string er = "";
-
-            bool isStockOutAny = false;
 
             try
             {
-                foreach (var item in orderCreateDto.ListOfItems)
+                using(var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    if (item.CurrentStock >= item.Quantity)
+                    try
                     {
-                        productsWithUpdatedStock.Add(new Product
-                        {
-                            Id = item.ProductId,
-                            Quantity = item.CurrentStock - item.Quantity
-                        });
+                        await _orderRepo.CreateOrder(order);
 
-                        int subTotal = item.Quantity * item.UnitPrice;
-                        CalculatedTotal += subTotal;
+                        List<OrderDetail> orderDetails = new List<OrderDetail>();
+                        int CalculatedTotal = 0;
 
-                        orderDetails.Add(new OrderDetail
+                        List<Product> productsWithUpdatedStock = new List<Product>();
+                        string er = "";
+
+                        bool isStockOutAny = false;
+
+                        try
                         {
-                            OrderId = order.Id,
-                            ProductId = item.ProductId,
-                            Quantity = item.Quantity,
-                            UnitPrice = item.UnitPrice,
-                            SubTotal = subTotal
-                        });
+                            foreach (var item in orderCreateDto.ListOfItems)
+                            {
+                                if (item.CurrentStock >= item.Quantity)
+                                {
+                                    //TODO: mapping Extension?
+                                    productsWithUpdatedStock.Add(new Product
+                                    {
+                                        Id = item.ProductId,
+                                        Quantity = item.CurrentStock - item.Quantity
+                                    });
+                                    //TODO: store only productId in a list for getting products from db,
+                                    // then modify these products and save
+
+                                    int subTotal = item.Quantity * item.UnitPrice;
+                                    CalculatedTotal += subTotal;
+
+                                    // TODO: Before adding OrderDetail in the list, checkig should be done for availability
+                                    orderDetails.Add(new OrderDetail
+                                    {
+                                        OrderId = order.Id,
+                                        ProductId = item.ProductId,
+                                        Quantity = item.Quantity,
+                                        UnitPrice = item.UnitPrice,
+                                        SubTotal = subTotal
+                                    });
+                                }
+                                else
+                                {
+                                    //stockOutErrorMsg.Add($"Product ({item.ProductId}): has not enough quantity!");
+                                    isStockOutAny = true;
+
+                                    er = er + $"Product({ item.ProductId}): has not enough quantity!";
+                                }
+                            }
+
+                            if (isStockOutAny)
+                            {
+                                throw new Exception(er);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+
+                        bool isOrderDetailsSaved = await _orderRepo.AddOrderDetails(orderDetails);
+
+                        if (isOrderDetailsSaved)
+                        {
+                            order.Total = CalculatedTotal;
+
+                            if (await _orderRepo.UpdateOrderWithTotal(order) == true)
+                            {
+                                resultSet.Data = order;
+                                resultSet.Success = true;
+                            }
+                        }
                     }
-                    else
+                    catch (Exception)
                     {
-                        stockOutErrorMsg.Add($"Product ({item.ProductId}): has not enough quantity!");
-                        isStockOutAny = true;
-
-                        er = er + $"Product({ item.ProductId}): has not enough quantity!";
+                        throw;
+                    }
+                    finally
+                    {
+                        transactionScope.Complete();
                     }
                 }
-                if (isStockOutAny)
-                {
-                    throw new Exception(er);
-                    //throw new Exception(stockOutErrorMsg.ToString());
-                }
-
+            }
+            catch (TransactionAbortedException)
+            {
+                throw;
             }
             catch (Exception)
             {
                 throw;
-            }
-            
-            bool isOrderDetailsSaved = await _orderRepo.AddOrderDetails(orderDetails);
-
-            if (isOrderDetailsSaved)
-            {
-                order.Total = CalculatedTotal;
-
-                if(await _orderRepo.UpdateOrderWithTotal(order) == true)
-                {
-                    resultSet.Data = order;
-                    resultSet.Success = true;
-                }
             }
 
             return resultSet;

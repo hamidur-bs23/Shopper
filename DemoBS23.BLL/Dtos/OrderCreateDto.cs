@@ -1,5 +1,5 @@
 ﻿using DemoBS23.DAL.Entities;
-using DemoBS23.DAL.Enum;
+using DemoBS23.DAL.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

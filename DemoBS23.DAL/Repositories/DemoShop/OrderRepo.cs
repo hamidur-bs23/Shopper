@@ -60,17 +60,11 @@ namespace DemoBS23.DAL.Repositories.DemoShop
 
         public async Task<Order> GetbyOrderId(int id)
         {
-            /*var order = _productDbContext.Orders
-                .Where(x=>x.Id == id)
-                .Include(x => x.OrderDetails)
-                    .ThenInclude(y=>y.Product)
-                .Include(x=>x.Customer)
-                .FirstOrDefault();*/
             var order = _productDbContext.Orders.Where(x => x.Id == id)
                     .Include(x => x.Customer)
                     .Include(x => x.OrderDetails)
                         .ThenInclude(y => y.Product)
-                        .ThenInclude(z => z.Category)
+                            .ThenInclude(z => z.Category)
                     .FirstOrDefault();
 
             return order;
@@ -79,9 +73,12 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         public async Task<bool> UpdateOrderWithTotal(Order order)
         {
             _productDbContext.Orders.Update(order);
-            if (await _productDbContext.SaveChangesAsync() > 0)
+            /*if (await _productDbContext.SaveChangesAsync() > 0)
                 return true;
-            return false;
+            return false;*/
+            //TODO: how to check if the data saved/modified?
+            await _productDbContext.SaveChangesAsync();
+            return true;
         }
     }
 }
