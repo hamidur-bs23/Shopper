@@ -1,5 +1,7 @@
 ﻿using DemoBS23.DAL.Entities;
+using DemoBS23.DAL.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -59,14 +61,26 @@ namespace DemoBS23.DAL.DatabaseContext
                 entity.Property<string>(e=>e.ContactNumber).HasMaxLength(50).IsRequired();
             });
 
+
+            /*var converterEnum = new ValueConverter<OrderStatus, string>(
+                    v=> v.ToString(),
+                    v => (OrderStatus)Enum.Parse(typeof(OrderStatus), v)
+                );*/
+
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property<DateTime>(e => e.DateCreated).HasDefaultValueSql("getdate()");
-                entity.Property<int>(e => e.Total).IsRequired();
+                entity.Property<int>(e => e.Total).HasDefaultValue(0).IsRequired();
 
+                entity.Property<OrderStatus>(e => e.Status)
+                    //.HasConversion(converterEnum);
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasConversion(v=>v.ToString(), v=> (OrderStatus)Enum.Parse(typeof(OrderStatus), v) );
+                
                 /*entity.Property<DateTime>(e => e.DateCreated)
-                    .HasConversion(a=>a, v=> DateTime.SpecifyKind(v, DateTimeKind.Utc));   */             
+                    .HasConversion(a=>a, v=> DateTime.SpecifyKind(v, DateTimeKind.Utc));   */
 
                 entity.HasOne<Customer>(o => o.Customer)
                     .WithMany(c => c.Orders)
@@ -93,17 +107,6 @@ namespace DemoBS23.DAL.DatabaseContext
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
             });
-
-            //modelBuilder.Entity<OrderDetail>(entity =>
-            //{
-            //    entity.HasOne<Order>(od=>od.Order)
-            //        .WithMany(o=>o.OrderDetails)
-            //        .HasForeignKey(od=>od.OrderId);
-
-            //    entity.HasOne<Product>(od => od.Product)
-            //        .WithMany(p => p.OrderDetails)
-            //        .HasForeignKey(od => od.ProductId);
-            //});
         }
     }
 }

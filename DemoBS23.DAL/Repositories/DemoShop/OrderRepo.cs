@@ -60,12 +60,6 @@ namespace DemoBS23.DAL.Repositories.DemoShop
 
         public async Task<Order> GetbyOrderId(int id)
         {
-            /*var order = _productDbContext.Orders
-                .Where(x=>x.Id == id)
-                .Include(x => x.OrderDetails)
-                    .ThenInclude(y=>y.Product)
-                .Include(x=>x.Customer)
-                .FirstOrDefault();*/
             var order = _productDbContext.Orders.Where(x => x.Id == id)
                     .Include(x => x.Customer)
                     .Include(x => x.OrderDetails)
@@ -79,9 +73,11 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         public async Task<bool> UpdateOrderWithTotal(Order order)
         {
             _productDbContext.Orders.Update(order);
-            if (await _productDbContext.SaveChangesAsync() > 0)
+            /*if (await _productDbContext.SaveChangesAsync() > 0)
                 return true;
-            return false;
+            return false;*/
+            await _productDbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

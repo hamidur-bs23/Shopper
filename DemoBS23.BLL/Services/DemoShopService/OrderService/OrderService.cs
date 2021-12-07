@@ -26,85 +26,94 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
             {
                 CustomerId = orderCreateDto.CustomerId,
                 DateCreated = DateTime.Now,
-                Total = -1,
-                //Status = OrderCreateDto.Status
+                Total = 0,
+                Status = orderCreateDto.Status
             };
 
             try
             {
-                using(var transactionScope = new TransactionScope())
+                using(var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    await _orderRepo.CreateOrder(order);
-
-                    List<OrderDetail> orderDetails = new List<OrderDetail>();
-                    int CalculatedTotal = 0;
-
-                    List<Product> productsWithUpdatedStock = new List<Product>();
-                    //List<string> stockOutErrorMsg = new List<string>();
-                    string er = "";
-
-                    bool isStockOutAny = false;
-
                     try
                     {
-                        foreach (var item in orderCreateDto.ListOfItems)
+                        await _orderRepo.CreateOrder(order);
+
+                        List<OrderDetail> orderDetails = new List<OrderDetail>();
+                        int CalculatedTotal = 0;
+
+                        List<Product> productsWithUpdatedStock = new List<Product>();
+                        string er = "";
+
+                        bool isStockOutAny = false;
+
+                        try
                         {
-                            if (item.CurrentStock >= item.Quantity)
+                            foreach (var item in orderCreateDto.ListOfItems)
                             {
-                                //TODO: mapping Extension?
-                                productsWithUpdatedStock.Add(new Product
+                                if (item.CurrentStock >= item.Quantity)
                                 {
-                                    Id = item.ProductId,
-                                    Quantity = item.CurrentStock - item.Quantity
-                                });
+                                    //TODO: mapping Extension?
+                                    productsWithUpdatedStock.Add(new Product
+                                    {
+                                        Id = item.ProductId,
+                                        Quantity = item.CurrentStock - item.Quantity
+                                    });
+                                    //TODO: store only productId in a list for getting products from db,
+                                    // then modify these products and save
 
-                                int subTotal = item.Quantity * item.UnitPrice;
-                                CalculatedTotal += subTotal;
+                                    int subTotal = item.Quantity * item.UnitPrice;
+                                    CalculatedTotal += subTotal;
 
-                                orderDetails.Add(new OrderDetail
+                                    // TODO: Before adding OrderDetail in the list, checkig should be done for availability
+                                    orderDetails.Add(new OrderDetail
+                                    {
+                                        OrderId = order.Id,
+                                        ProductId = item.ProductId,
+                                        Quantity = item.Quantity,
+                                        UnitPrice = item.UnitPrice,
+                                        SubTotal = subTotal
+                                    });
+                                }
+                                else
                                 {
-                                    OrderId = order.Id,
-                                    ProductId = item.ProductId,
-                                    Quantity = item.Quantity,
-                                    UnitPrice = item.UnitPrice,
-                                    SubTotal = subTotal
-                                });
+                                    //stockOutErrorMsg.Add($"Product ({item.ProductId}): has not enough quantity!");
+                                    isStockOutAny = true;
+
+                                    er = er + $"Product({ item.ProductId}): has not enough quantity!";
+                                }
                             }
-                            else
-                            {
-                                //stockOutErrorMsg.Add($"Product ({item.ProductId}): has not enough quantity!");
-                                isStockOutAny = true;
 
-                                er = er + $"Product({ item.ProductId}): has not enough quantity!";
+                            if (isStockOutAny)
+                            {
+                                throw new Exception(er);
                             }
                         }
-                        
-                        if (isStockOutAny)
+                        catch (Exception)
                         {
-                            throw new Exception(er);
-                            //throw new Exception(stockOutErrorMsg.ToString());
+                            throw;
                         }
 
+                        bool isOrderDetailsSaved = await _orderRepo.AddOrderDetails(orderDetails);
+
+                        if (isOrderDetailsSaved)
+                        {
+                            order.Total = CalculatedTotal;
+
+                            if (await _orderRepo.UpdateOrderWithTotal(order) == true)
+                            {
+                                resultSet.Data = order;
+                                resultSet.Success = true;
+                            }
+                        }
                     }
                     catch (Exception)
                     {
                         throw;
                     }
-
-                    bool isOrderDetailsSaved = await _orderRepo.AddOrderDetails(orderDetails);
-
-                    if (isOrderDetailsSaved)
+                    finally
                     {
-                        order.Total = CalculatedTotal;
-
-                        if (await _orderRepo.UpdateOrderWithTotal(order) == true)
-                        {
-                            resultSet.Data = order;
-                            resultSet.Success = true;
-                        }
+                        transactionScope.Complete();
                     }
-
-                    transactionScope.Complete();
                 }
             }
             catch (TransactionAbortedException)
@@ -135,6 +144,7 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
                         resultSet.Data = data;
                         resultSet.Success = true;
                     }
+                    return resultSet;
                 }
                 catch (Exception)
                 {
