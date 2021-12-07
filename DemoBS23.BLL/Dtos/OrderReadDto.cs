@@ -10,7 +10,7 @@ namespace DemoBS23.BLL.Dtos
         public string Status { get; set; }
         public string CreatedTime { get; set; }
 
-        public ICollection<OrderDetailsReadDto> OrderedItems { get; set; }       
+        public ICollection<OrderDetailReadDto> OrderedItems { get; set; }       
     }
 
     public static class OrderReadDtoExtensions

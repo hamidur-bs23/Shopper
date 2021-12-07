@@ -115,7 +115,7 @@ namespace DemoBS23.BLL.Services.DemoShopService.ProductService
 
                 existedProduct.Name = updateProduct.Name;
                 existedProduct.Price = updateProduct.Price;
-                existedProduct.Quantity = updateProduct.Quantity;
+                existedProduct.StockInHand = updateProduct.Quantity;
                 existedProduct.Description = updateProduct.Description;
                 existedProduct.CategoryId = updateProduct.CategoryId;
 

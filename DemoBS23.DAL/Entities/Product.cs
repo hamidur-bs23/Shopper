@@ -19,7 +19,7 @@ namespace DemoBS23.DAL.Entities
 
         //[Required]
         //[Range(0, int.MaxValue)]
-        public int Quantity { get; set; }
+        public int StockInHand { get; set; }
 
         
         public string Description { get; set; }

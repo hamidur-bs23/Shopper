@@ -35,7 +35,7 @@ namespace DemoBS23.BLL.Dtos
             {
                 Name = dto.Name,
                 Price = dto.Price,
-                Quantity = dto.Quantity,
+                StockInHand = dto.Quantity,
                 Description = dto.Description,
                 CategoryId = dto.CategoryId
             };

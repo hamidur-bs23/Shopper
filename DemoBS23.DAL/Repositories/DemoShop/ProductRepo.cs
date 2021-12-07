@@ -62,6 +62,19 @@ namespace DemoBS23.DAL.Repositories.DemoShop
             return productFromDb;
         }
 
+        public async Task<ICollection<Product>> GetProductsByListOfIds(ICollection<int> listOfIds)
+        {
+            var data = _productDbContext.Products
+                .Where(e => listOfIds.Contains(e.Id))
+                .Distinct()
+                .ToList();
+
+            if(data.Count > 0){
+                return data; 
+            }
+            return null;
+        }
+
 
 
         public async Task<ICollection<Product>> GetAll()

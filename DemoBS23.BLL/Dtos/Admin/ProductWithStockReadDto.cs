@@ -24,7 +24,7 @@ namespace DemoBS23.BLL.Dtos.Admin
                 Id = dto.Id,
                 Name = dto.Name,
                 Price = dto.Price,
-                Quantity = dto.Quantity,
+                Quantity = dto.StockInHand,
                 Description = dto.Description,
                 CategoryName = dto.Category.Name
             };

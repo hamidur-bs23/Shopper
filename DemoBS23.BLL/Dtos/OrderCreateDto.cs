@@ -14,7 +14,7 @@ namespace DemoBS23.BLL.Dtos
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
         [Required]
-        public IList<ItemWithPriceAndQuantity> ListOfItems { get; set; }       
+        public IList<OrderDetailCreateDto> ListOfItems { get; set; }       
     }
 
     public static class OrderCreateDtoExtensions
@@ -24,19 +24,13 @@ namespace DemoBS23.BLL.Dtos
             var order = new Order
             {
                 CustomerId = dto.CustomerId,
-
+                DateCreated = DateTime.UtcNow,
+                Total = 0,
+                Status = dto.Status
             };
 
             return order;
         }
-    }
-
-    public class ItemWithPriceAndQuantity
-    {
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
-        public int UnitPrice { get; set; }
-        public int CurrentStock { get; set; }
     }
 }
 

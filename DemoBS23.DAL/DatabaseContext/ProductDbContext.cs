@@ -44,7 +44,7 @@ namespace DemoBS23.DAL.DatabaseContext
                 entity.HasKey(e => e.Id);
                 entity.Property<string>(e => e.Name).HasMaxLength(50).IsRequired();
                 entity.Property<int>(e => e.Price).IsRequired();
-                entity.Property<int>(e => e.Quantity).IsRequired();
+                entity.Property<int>(e => e.StockInHand).IsRequired();
                 entity.Property<string>(e => e.Description).HasMaxLength(200).IsRequired(false);
 
                 entity.HasOne<Category>(p => p.Category)

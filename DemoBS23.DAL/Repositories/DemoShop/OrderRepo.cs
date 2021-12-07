@@ -17,30 +17,6 @@ namespace DemoBS23.DAL.Repositories.DemoShop
         {
             _productDbContext = productDbContext;
         }
-        /*public async Task<void> AddOrder(Order order)
-        {
-            _productDbContext.Orders.Add(order);
-            _productDbContext.SaveChanges();
-
-            IList<OrderDetail> orderList = new List<OrderDetail>();
-            foreach(var item in order.OrderDetails)
-            {
-                var d = new OrderDetail
-                {
-                    OrderId = order.Id,
-
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity,
-                    UnitPrice = item.UnitPrice,
-                    SubTotal = item.SubTotal
-                };
-
-                orderList.Add(item);
-            }
-
-            _productDbContext.OrderDetails.AddRange(orderList);
-            _productDbContext.SaveChanges();
-        }*/
 
         public async Task<bool> AddOrderDetails(ICollection<OrderDetail> orderDetails)
         {

@@ -3,6 +3,7 @@ using DemoBS23.DAL.Entities;
 using DemoBS23.DAL.Repositories.DemoShop;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -12,80 +13,67 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
     public class OrderService : IOrderService
     {
         private readonly IOrderRepo _orderRepo;
+        private readonly IProductRepo _productRepo;
 
-        public OrderService(IOrderRepo orderRepo)
+        public OrderService(IOrderRepo orderRepo, IProductRepo productRepo)
         {
             _orderRepo = orderRepo;
+            _productRepo = productRepo;
         }
         public async Task<ResultSet<Order>> AddOrder(OrderCreateDto orderCreateDto)
         {
             ResultSet<Order> resultSet = new ResultSet<Order>();
 
-            //TODO: mapping extension?
-            Order order = new Order
-            {
-                CustomerId = orderCreateDto.CustomerId,
-                DateCreated = DateTime.Now,
-                Total = 0,
-                Status = orderCreateDto.Status
-            };
+            Order order = orderCreateDto.ToEntity();
 
             try
             {
-                using(var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
                     try
                     {
                         await _orderRepo.CreateOrder(order);
 
-                        List<OrderDetail> orderDetails = new List<OrderDetail>();
+                        var orderDetails = new List<OrderDetail>();
                         int CalculatedTotal = 0;
-
-                        List<Product> productsWithUpdatedStock = new List<Product>();
-                        string er = "";
-
+                        string errorMsgsForStockOutAny = "";
                         bool isStockOutAny = false;
+
+
+                        var selecteProductIds = new List<int>();
+                        foreach (var item in orderCreateDto.ListOfItems)
+                        {
+                            selecteProductIds.Add(item.ProductId);
+                        }
+
+                        var selectedProducts = await _productRepo.GetProductsByListOfIds(selecteProductIds);
 
                         try
                         {
                             foreach (var item in orderCreateDto.ListOfItems)
                             {
-                                if (item.CurrentStock >= item.Quantity)
+                                var productFromDb = selectedProducts.Where(e => e.Id == item.ProductId).FirstOrDefault();
+
+                                if (productFromDb.StockInHand >= item.Quantity)
                                 {
-                                    //TODO: mapping Extension?
-                                    productsWithUpdatedStock.Add(new Product
-                                    {
-                                        Id = item.ProductId,
-                                        Quantity = item.CurrentStock - item.Quantity
-                                    });
-                                    //TODO: store only productId in a list for getting products from db,
-                                    // then modify these products and save
+                                    productFromDb.StockInHand -= item.Quantity;
 
-                                    int subTotal = item.Quantity * item.UnitPrice;
-                                    CalculatedTotal += subTotal;
+                                    item.SubTotal = productFromDb.Price * item.Quantity;
+                                    CalculatedTotal += item.SubTotal;
 
-                                    // TODO: Before adding OrderDetail in the list, checkig should be done for availability
-                                    orderDetails.Add(new OrderDetail
-                                    {
-                                        OrderId = order.Id,
-                                        ProductId = item.ProductId,
-                                        Quantity = item.Quantity,
-                                        UnitPrice = item.UnitPrice,
-                                        SubTotal = subTotal
-                                    });
+                                    orderDetails.Add(item.ToEntity());
                                 }
                                 else
                                 {
-                                    //stockOutErrorMsg.Add($"Product ({item.ProductId}): has not enough quantity!");
                                     isStockOutAny = true;
 
-                                    er = er + $"Product({ item.ProductId}): has not enough quantity!";
+                                    errorMsgsForStockOutAny += $"Product({ item.ProductId}): has not enough quantity!";
                                 }
                             }
 
                             if (isStockOutAny)
                             {
-                                throw new Exception(er);
+                                throw new Exception(errorMsgsForStockOutAny);
                             }
                         }
                         catch (Exception)
@@ -134,7 +122,7 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
 
             var dataFromDb = await _orderRepo.GetbyOrderId(id);
 
-            if(dataFromDb != null)
+            if (dataFromDb != null)
             {
                 try
                 {
@@ -150,8 +138,8 @@ namespace DemoBS23.BLL.Services.DemoShopService.OrderService
                 {
                     throw;
                 }
-            }            
-                       
+            }
+
             return null;
         }
     }
