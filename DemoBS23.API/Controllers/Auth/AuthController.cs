@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DemoBS23.API.Controllers.Auth
 {
-    [Route("api/Auth")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace DemoBS23.API.Controllers.Auth
         }
 
 
-        [Route("Register")]
+        [Route("register")]
         [HttpPost]
         public async Task<IActionResult> RegisterAsync([FromBody] AuthUserRegistrationCreateDto userToCreate)
         {
@@ -85,7 +85,7 @@ namespace DemoBS23.API.Controllers.Auth
         }
 */
 
-        [Route("Login")]
+        [Route("login")]
         [HttpPost]
         public async Task<IActionResult> LoginAsync([FromBody] AuthUserLoginCreateDto model)
         {

@@ -131,6 +131,13 @@ namespace DemoBS23.API
             }).AddJwtBearer(jwtOptions => {
                     jwtOptions.SaveToken = true;
                     jwtOptions.TokenValidationParameters = tokenValidationParams; });
+
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader() );
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -143,6 +150,8 @@ namespace DemoBS23.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

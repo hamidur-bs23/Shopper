@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace DemoBS23.API.Controllers.Admin
 {
 
-    [Route("api/[controller]")]
+    [Route("api/admin")]
     [ApiController]
     public class AdminController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace DemoBS23.API.Controllers.Admin
             _adminService = adminService;
         }
 
-        [HttpGet("GetAllProductsWithStock")]
+        [HttpGet("getallproductswithstock")]
         public async Task<ActionResult<ResultSet<ICollection<ProductWithStockReadDto>>>> GetProductsWithStock()
         {
             ResultSet<ICollection<ProductWithStockReadDto>> resultSet = new ResultSet<ICollection<ProductWithStockReadDto>>();

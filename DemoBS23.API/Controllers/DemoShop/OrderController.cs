@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace DemoBS23.API.Controllers.DemoShop
 {
 
-    [Route("api/[controller]")]
+    [Route("api/order")]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace DemoBS23.API.Controllers.DemoShop
             _orderService = orderService;
         }
 
-        [HttpPost("Add")]
+        [HttpPost("add")]
         public async Task<ActionResult<ResultSet<OrderReadDto>>> Add(OrderCreateDto orderCreateDto)
         {
             var resultSet = new ResultSet<OrderReadDto>();
@@ -44,7 +44,7 @@ namespace DemoBS23.API.Controllers.DemoShop
 
         }
 
-        [HttpGet("Get/{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<ResultSet<Order>>> GetbyOrderId(int id)
         {
             ResultSet<OrderReadDto> resultSet = new ResultSet<OrderReadDto>();

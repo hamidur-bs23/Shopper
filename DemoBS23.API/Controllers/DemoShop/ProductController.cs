@@ -13,7 +13,7 @@ namespace DemoBS23.API.Controllers.DemoShop
 {
     //[Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/product")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -23,7 +23,7 @@ namespace DemoBS23.API.Controllers.DemoShop
             _productService = productService;
         }
 
-        [HttpPost("Category/Add")]
+        [HttpPost("category/add")]
         public async Task<ActionResult<ResultSet<Category>>> AddCategory(CategoryCreateDto categoryCreateDto)
         {
             ResultSet<Category> resultSet = new ResultSet<Category>();
@@ -45,7 +45,7 @@ namespace DemoBS23.API.Controllers.DemoShop
         }
         
        
-        [HttpGet("Category/Get/{id}")]
+        [HttpGet("category/get/{id}")]
         public async Task<ActionResult<ResultSet<Category>>> GetCategoryById(int id)
         {
             ResultSet<Category> resultSet = new ResultSet<Category>();
@@ -72,7 +72,7 @@ namespace DemoBS23.API.Controllers.DemoShop
         }
 
 
-        [HttpPost("Add")]
+        [HttpPost("add")]
         public async Task<ActionResult<ResultSet<Product>>> AddProduct(ProductCreateDto productCreateDto)
         {
             ResultSet<Product> resultSet = new ResultSet<Product>();
@@ -93,7 +93,7 @@ namespace DemoBS23.API.Controllers.DemoShop
             }
         }
 
-        [HttpGet("Get/{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<ResultSet<Product>>> GetProductById(int id)
         {
             ResultSet<Product> resultSet = new ResultSet<Product>();
@@ -122,7 +122,7 @@ namespace DemoBS23.API.Controllers.DemoShop
 
 
         [AllowAnonymous]
-        [HttpGet("GetAll")]
+        [HttpGet("getall")]
         public async Task<ActionResult<ResultSet<ICollection<ProductReadDto>>>> GetAll()
         {
             ResultSet<ICollection<ProductReadDto>> resultSet = new ResultSet<ICollection<ProductReadDto>>();
@@ -144,7 +144,7 @@ namespace DemoBS23.API.Controllers.DemoShop
         }
 
 
-        [HttpPut("Update/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<ActionResult<ResultSet<ProductReadDto>>> Update(int id, ProductCreateDto updateProduct)
         {
             ResultSet<ProductReadDto> resultSet = new ResultSet<ProductReadDto>();
@@ -166,7 +166,7 @@ namespace DemoBS23.API.Controllers.DemoShop
         }
 
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<ActionResult<ResultSet<bool>>> Delete(int id)
         {
             ResultSet<bool> resultSet = new ResultSet<bool>();

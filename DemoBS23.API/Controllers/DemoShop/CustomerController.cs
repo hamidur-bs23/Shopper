@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DemoBS23.API.Controllers.DemoShop
 {
-    [Route("api/[controller]")]
+    [Route("api/customer")]
     [ApiController]
     public class CustomerController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace DemoBS23.API.Controllers.DemoShop
             _customerService = customerService;
         }
 
-        [HttpPost("Add")]
+        [HttpPost("add")]
         public async Task<ActionResult<ResultSet<Customer>>> Add(CustomerCreateDto customerCreateDto)
         {
             ResultSet<Customer> resultSet = new ResultSet<Customer>();
@@ -43,7 +43,7 @@ namespace DemoBS23.API.Controllers.DemoShop
         }
 
 
-        [HttpGet("Get/{id}")]
+        [HttpGet("get/{id}")]
         public async Task<ActionResult<ResultSet<Customer>>> GetCustomerById(int id)
         {
             ResultSet<Customer> resultSet = new ResultSet<Customer>();
