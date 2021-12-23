@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DemoBS23.API.Controllers.DemoShop
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/product")]
     public class ProductController : ControllerBase
@@ -121,7 +121,7 @@ namespace DemoBS23.API.Controllers.DemoShop
 
 
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [HttpGet("getall")]
         public async Task<ActionResult<ResultSet<ICollection<ProductReadDto>>>> GetAll()
         {

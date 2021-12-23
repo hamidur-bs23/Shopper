@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 
 namespace DemoBS23.BLL.Services.Auth
 {
@@ -21,7 +22,10 @@ namespace DemoBS23.BLL.Services.Auth
         private readonly TokenValidationParameters _tokenValidationParams;
         private readonly JwtConfig _jwtConfig;
 
-        public AuthService(IAuthRepo authRepo, IOptionsMonitor<JwtConfig> jwtConfig, TokenValidationParameters tokenValidationParams)
+        public AuthService(
+            IAuthRepo authRepo, 
+            IOptionsMonitor<JwtConfig> jwtConfig, 
+            TokenValidationParameters tokenValidationParams)
         {
             _authRepo = authRepo;
             _jwtConfig = jwtConfig.CurrentValue;
@@ -138,6 +142,20 @@ namespace DemoBS23.BLL.Services.Auth
             {
                 result.Errors = authenticUser.Errors;
             }
+
+            return result;
+
+        }
+
+        public async Task<AuthResultSet> GetUserAsync()
+        {
+            AuthResultSet result = new AuthResultSet();
+
+            //if (this._httpContext.Response.Headers.TryGetValue("Authorization", out var authorizationToken))
+            //{
+            //    Console.WriteLine(authorizationToken);
+
+            //}
 
             return result;
 

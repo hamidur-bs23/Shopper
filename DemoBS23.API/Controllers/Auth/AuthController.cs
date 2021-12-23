@@ -1,5 +1,7 @@
 ﻿using DemoBS23.BLL.Dtos.Auth;
 using DemoBS23.BLL.Services.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -143,5 +145,30 @@ namespace DemoBS23.API.Controllers.Auth
             }
 
         }*/
+
+        [Authorize]
+        [Route("getuser")]
+        [HttpGet]
+        public async Task<IActionResult> GetUserAsync()
+        {
+            
+            try
+            {
+                if(Request.Headers.TryGetValue("Authorization", out var authorizationToken))
+                {
+                    return Ok(new {
+                        Email = "user101@mail.com"
+                    });
+                }
+
+                return BadRequest("Try again later. Bad Request");
+            }
+            catch (Exception exception)
+            {
+                throw new Exception("ERROR: " + exception.Message, exception);
+            }
+        }
+
+
     }
 }

@@ -210,6 +210,16 @@ namespace DemoBS23.DAL.Repositories.Auth
         }
 
 
+        public async Task<AuthDbResponse<AuthUser>> GetUserAsync()
+        {
+            AuthDbResponse<AuthUser> result = new AuthDbResponse<AuthUser>();
+
+            return result;
+
+        }
+
+
+
         public async Task<IList<string>> GetUserRolesAsync(AuthUser user)
         {
             IList<string> userRoles = null;

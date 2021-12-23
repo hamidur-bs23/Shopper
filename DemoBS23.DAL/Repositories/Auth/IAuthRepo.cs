@@ -19,5 +19,6 @@ namespace DemoBS23.DAL.Repositories.Auth
         Task<AuthDbResponse<AuthRefreshToken>> RetrivedToken(string refreshToken);
 
         Task<AuthDbResponse<AuthRefreshToken>> UpdateRefreshToken(AuthRefreshToken refreshToken);
+        Task<AuthDbResponse<AuthUser>> GetUserAsync();
     }
 }
