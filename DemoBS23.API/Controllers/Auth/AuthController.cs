@@ -156,8 +156,9 @@ namespace DemoBS23.API.Controllers.Auth
             {
                 if(Request.Headers.TryGetValue("Authorization", out var authorizationToken))
                 {
+                    Request.Headers.TryGetValue("email", out var email);
                     return Ok(new {
-                        Email = "user101@mail.com"
+                        Email = email
                     });
                 }
 

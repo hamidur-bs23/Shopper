@@ -48,6 +48,24 @@ namespace DemoBS23.BLL.Services.DemoShopService.ProductService
             return resultSet;
         }
 
+        public async Task<ResultSet<ICollection<CategoryReadDto>>> GetAllCategories()
+        {
+            ResultSet<ICollection<CategoryReadDto>> resultSet = new ResultSet<ICollection<CategoryReadDto>>();
+
+            var fromDb = await _productRepo.GetAllCategories();
+
+            var data = fromDb.Select(x => x.ToReadDto()).ToList();
+
+            resultSet.Data = data;
+
+            if (resultSet.Data != null)
+            {
+                resultSet.Success = true;
+            }
+
+            return resultSet;
+        }
+
 
 
 

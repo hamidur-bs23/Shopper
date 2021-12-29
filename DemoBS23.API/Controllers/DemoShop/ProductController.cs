@@ -71,6 +71,29 @@ namespace DemoBS23.API.Controllers.DemoShop
             }
         }
 
+        [HttpGet("category/getall")]
+        public async Task<ActionResult<ResultSet<ICollection<CategoryReadDto>>>> GetAllCategories()
+        {
+            ResultSet<ICollection<CategoryReadDto>> resultSet = new ResultSet<ICollection<CategoryReadDto>>();
+            try
+            {
+                resultSet = await _productService.GetAllCategories();
+
+                if (resultSet.Data == null || resultSet.Success == false)
+                {
+                    return NotFound();
+                }
+
+                return Ok(resultSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
+        }
+
+
+
 
         [HttpPost("add")]
         public async Task<ActionResult<ResultSet<Product>>> AddProduct(ProductCreateDto productCreateDto)

@@ -12,6 +12,8 @@ namespace DemoBS23.BLL.Services.DemoShopService.ProductService
         public Task<ResultSet<Category>> AddCategory(CategoryCreateDto categoryCreateDto);
         public Task<ResultSet<Category>> GetCategoryById(int id);
 
+        public Task<ResultSet<ICollection<CategoryReadDto>>> GetAllCategories();
+
 
         public Task<ResultSet<Product>> AddProduct(ProductCreateDto productCreateDto);
         public Task<ResultSet<Product>> GetProductById(int id);

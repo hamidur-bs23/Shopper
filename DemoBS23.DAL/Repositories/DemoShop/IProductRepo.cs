@@ -10,6 +10,7 @@ namespace DemoBS23.DAL.Repositories.DemoShop
     {
         public Task<Category> AddCategory(Category category);
         public Task<Category> GetCategoryById(int id);
+        public Task<ICollection<Category>> GetAllCategories();
 
 
         public Task<Product> AddProduct(Product product);

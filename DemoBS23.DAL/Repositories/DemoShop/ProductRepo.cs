@@ -39,6 +39,11 @@ namespace DemoBS23.DAL.Repositories.DemoShop
             return categoryFromDb;
         }
 
+        public async Task<ICollection<Category>> GetAllCategories()
+        {
+            var dataFromDb = _productDbContext.Categories.Include(x => x.Products).ToList();
+            return dataFromDb;
+        }
 
 
         public async Task<Product> AddProduct(Product product)
