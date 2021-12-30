@@ -47,7 +47,7 @@ namespace DemoBS23.API.Controllers.Auth
             }
         }
 
-        /*[Route("RegisterAdmin")]
+        /*[Route("registerAdmin")]
         [HttpPost]
         public async Task<IActionResult> RegisterAdminAsync([FromBody] AuthUserRegistrationCreateDto userToCreate)
         {
@@ -67,7 +67,7 @@ namespace DemoBS23.API.Controllers.Auth
         }
 
 
-        [Route("RegisterManager")]
+        [Route("registerManager")]
         [HttpPost]
         public async Task<IActionResult> RegisterManagerAsync([FromBody] AuthUserRegistrationCreateDto userToCreate)
         {
@@ -147,7 +147,7 @@ namespace DemoBS23.API.Controllers.Auth
         }*/
 
         [Authorize]
-        [Route("getuser")]
+        [Route("getUser")]
         [HttpGet]
         public async Task<IActionResult> GetUserAsync()
         {

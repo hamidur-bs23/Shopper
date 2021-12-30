@@ -71,7 +71,7 @@ namespace DemoBS23.API.Controllers.DemoShop
             }
         }
 
-        [HttpGet("category/getall")]
+        [HttpGet("category/getAll")]
         public async Task<ActionResult<ResultSet<ICollection<CategoryReadDto>>>> GetAllCategories()
         {
             ResultSet<ICollection<CategoryReadDto>> resultSet = new ResultSet<ICollection<CategoryReadDto>>();
@@ -145,7 +145,7 @@ namespace DemoBS23.API.Controllers.DemoShop
 
 
         //[AllowAnonymous]
-        [HttpGet("getall")]
+        [HttpGet("getAll")]
         public async Task<ActionResult<ResultSet<ICollection<ProductReadDto>>>> GetAll()
         {
             ResultSet<ICollection<ProductReadDto>> resultSet = new ResultSet<ICollection<ProductReadDto>>();
