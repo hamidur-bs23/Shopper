@@ -18,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
@@ -70,16 +71,46 @@ namespace DemoBS23.API
             services.AddSwaggerGen(options =>
             {
                 var currentVersion = Configuration.GetValue<string>("ApiVersion:currentVersion");
+                var currentName = Configuration.GetValue<string>("ApiVersion:name");
+
                 options.SwaggerDoc(currentVersion,
                     new Microsoft.OpenApi.Models.OpenApiInfo
                     {
-                        Title = "BrainStation-23 Demo API",
-                        Description = "This is a demo api by Hamid",
+                        Title = currentName,
+                        Description = "This is a demo api for learning...",
                         Version = currentVersion
                     });
+
                 var fileName = $"{ Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var filePath = Path.Combine(AppContext.BaseDirectory, fileName);
+
                 options.IncludeXmlComments(filePath);
+
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name =  "Authorization",
+                    Type =  SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer xxx.yyy.zzz\"",
+
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
 
             });
 
