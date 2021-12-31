@@ -12,6 +12,7 @@ namespace Shopper.API.Controllers.Auth
 {
     [Route("api/auth")]
     [ApiController]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -22,8 +23,29 @@ namespace Shopper.API.Controllers.Auth
         }
 
 
-        [Route("register")]
-        [HttpPost]
+        /// <summary>
+        /// Register a new user who can login this application
+        /// </summary>
+        /// <returns>Return JWT token</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /auth/register
+        ///     {
+        ///          "userName": "user101",
+        ///          "email": "user101@mail.com",
+        ///          "password": "Pass@1234"
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Success</response>
+        /// <response code="400">Incorrect or null input</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Server Error</response>
+        [HttpPost("register")]
+        [Produces("application/json")]
         public async Task<IActionResult> RegisterAsync([FromBody] AuthUserRegistrationCreateDto userToCreate)
         {
             if (!ModelState.IsValid)
@@ -46,6 +68,7 @@ namespace Shopper.API.Controllers.Auth
                 throw new Exception("ERROR: ", exception);
             }
         }
+
 
         /*[Route("registerAdmin")]
         [HttpPost]
@@ -87,8 +110,29 @@ namespace Shopper.API.Controllers.Auth
         }
 */
 
-        [Route("login")]
-        [HttpPost]
+
+        /// <summary>
+        /// Login to the application
+        /// </summary>
+        /// <returns>Return JWT token</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /auth/login
+        ///     {
+        ///          "email": "user101@mail.com",
+        ///          "password": "Pass@1234"
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Success</response>
+        /// <response code="400">Incorrect or null input</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Server Error</response>
+        [HttpPost("login")]
+        [Produces("application/json")]
         public async Task<IActionResult> LoginAsync([FromBody] AuthUserLoginCreateDto model)
         {
             try
@@ -146,9 +190,21 @@ namespace Shopper.API.Controllers.Auth
 
         }*/
 
+
+        /// <summary>
+        /// Retrieve logged-in user's profile
+        /// </summary>
+        /// <returns>Return logged-in user information</returns>
+        /// <remarks>
+        /// <response code="201">Success</response>
+        /// <response code="400">Incorrect or null input</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Server Error</response>
+        [HttpGet("getUser")]
+        [Produces("application/json")]
         [Authorize]
-        [Route("getUser")]
-        [HttpGet]
         public async Task<IActionResult> GetUserAsync()
         {
             

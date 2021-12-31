@@ -8,12 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Shopper.API.Controllers.DemoShop
 {
+    [Route("api/product")]
     [Authorize]
     [ApiController]
-    [Route("api/product")]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -22,6 +24,7 @@ namespace Shopper.API.Controllers.DemoShop
         {
             _productService = productService;
         }
+
 
         [HttpPost("category/add")]
         public async Task<ActionResult<ResultSet<Category>>> AddCategory(CategoryCreateDto categoryCreateDto)
@@ -71,6 +74,7 @@ namespace Shopper.API.Controllers.DemoShop
             }
         }
 
+
         [HttpGet("category/getAll")]
         public async Task<ActionResult<ResultSet<ICollection<CategoryReadDto>>>> GetAllCategories()
         {
@@ -93,9 +97,30 @@ namespace Shopper.API.Controllers.DemoShop
         }
 
 
-
-
+        /// <summary>
+        /// Add new product
+        /// </summary>
+        /// <returns>Return newly created product</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /product/add
+        ///     {
+        ///          "name": "Product - 101",
+        ///          "price": 100,
+        ///          "quantity": 12,
+        ///          "description": "Description-101",
+        ///          "categoryId": 1
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Success</response>
+        /// <response code="400">Incorrect or null input</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
         [HttpPost("add")]
+        [Produces("application/json")]
         public async Task<ActionResult<ResultSet<Product>>> AddProduct(ProductCreateDto productCreateDto)
         {
             ResultSet<Product> resultSet = new ResultSet<Product>();
@@ -116,6 +141,17 @@ namespace Shopper.API.Controllers.DemoShop
             }
         }
 
+
+        /// <summary>
+        /// Retrieve single product based on identifier
+        /// </summary>
+        /// <param name="id">Identifier (Number)</param>
+        /// <returns>Retrieve a collection of products</returns>
+        /// <response code="201">Success</response>
+        /// <response code="400">Incorrect or null input</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
         [HttpGet("get/{id}")]
         public async Task<ActionResult<ResultSet<Product>>> GetProductById(int id)
         {
@@ -143,9 +179,18 @@ namespace Shopper.API.Controllers.DemoShop
         }
 
 
-
+        /// <summary>
+        /// Retrieve all products
+        /// </summary>
+        /// <returns>Retrieve a collection of products</returns>
+        /// <response code="201">Success</response>
+        /// <response code="400">Incorrect or null input</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
         //[AllowAnonymous]
         [HttpGet("getAll")]
+        [Produces("application/json")]
         public async Task<ActionResult<ResultSet<ICollection<ProductReadDto>>>> GetAll()
         {
             ResultSet<ICollection<ProductReadDto>> resultSet = new ResultSet<ICollection<ProductReadDto>>();

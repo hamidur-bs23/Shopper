@@ -74,16 +74,26 @@ namespace Shopper.API
                 var currentName = Configuration.GetValue<string>("ApiVersion:name");
 
                 options.SwaggerDoc(currentVersion,
-                    new Microsoft.OpenApi.Models.OpenApiInfo
+                    new OpenApiInfo
                     {
                         Title = currentName,
-                        Description = "This is a demo api for learning...",
-                        Version = currentVersion
+                        Description = "An ASP.NET Core 3.1 Web Api for Shopper (Demo Online Shop)",
+                        Version = currentVersion,
+                        TermsOfService = new Uri("https://example.com/terms"),
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Contact",
+                            Url = new Uri("https://example.com/contact")
+                        },
+                        License = new OpenApiLicense
+                        {
+                            Name = "License",
+                            Url = new Uri("https://example.com/license")
+                        }
                     });
 
                 var fileName = $"{ Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var filePath = Path.Combine(AppContext.BaseDirectory, fileName);
-
                 options.IncludeXmlComments(filePath);
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
@@ -180,6 +190,8 @@ namespace Shopper.API
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
@@ -196,7 +208,7 @@ namespace Shopper.API
             app.UseSwaggerUI(options=>
             {
                 var currentVersion = Configuration.GetValue<string>("ApiVersion:currentVersion");
-                options.SwaggerEndpoint($"/swagger/{currentVersion}/swagger.json", "BS23_Demo_API by Hamidur");
+                options.SwaggerEndpoint($"/swagger/{currentVersion}/swagger.json", $"Shopper - Web API v{currentVersion}");
             });
         }
     }
