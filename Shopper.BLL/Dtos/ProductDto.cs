@@ -27,7 +27,17 @@ namespace Shopper.BLL.Dtos
         public int CategoryId { get; set; }
     }
 
-    public static class ProductCreateDtoExtensions
+    public class ProductReadDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Price { get; set; }
+        //public int Quantity { get; set; }
+        public string Description { get; set; }
+        public string CategoryName { get; set; }
+    }
+
+    public static class ProductDtoExtensions
     {
         public static Product ToEntity(this ProductCreateDto dto)
         {
@@ -42,18 +52,19 @@ namespace Shopper.BLL.Dtos
 
             return product;
         }
-        
-        public static ProductReadDto ToReadDto_bak(this Product model)
-        {
-            ProductReadDto dto = new ProductReadDto
-            {
-                Name = model.Name,
-                Price = model.Price,
-                Description = model.Description,
-                CategoryName = model.Category.Name
-            };
 
-            return dto;
+        public static ProductReadDto ToReadDto(this Product dto)
+        {
+            return new ProductReadDto
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Price = dto.Price,
+                //Quantity = dto.Quantity,
+                Description = dto.Description,
+                CategoryName = dto.Category.Name
+            };
         }
+
     }
 }

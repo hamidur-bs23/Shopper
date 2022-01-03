@@ -1,6 +1,7 @@
 ﻿using Shopper.DAL.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Shopper.BLL.Dtos
@@ -10,6 +11,11 @@ namespace Shopper.BLL.Dtos
         public int Id { get; set; }
         public string Name { get; set; }
 
+    }
+    public class CategoryCreateDto
+    {
+        [Required]
+        public string Name { get; set; }
     }
 
     public static class CategoryDtoExtensions

@@ -19,7 +19,7 @@ namespace Shopper.BLL.Dtos
 
     }
 
-    public static class CustomerCreateDtoExtensions
+    public static class CustomerDtoExtensions
     {
         public static Customer ToEntity(this CustomerCreateDto dto)
         {

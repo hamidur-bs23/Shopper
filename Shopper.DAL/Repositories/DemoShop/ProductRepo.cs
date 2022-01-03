@@ -45,7 +45,7 @@ namespace Shopper.DAL.Repositories.DemoShop
         {
             var dataFromDb = _productDbContext.Categories
                 .Include(x => x.Products)
-                .OrderBy(x => x.Name)
+                .OrderByDescending(x => x.CreatedOn)
                 .ToList();
             return dataFromDb;
         }

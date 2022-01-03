@@ -37,6 +37,7 @@ namespace Shopper.DAL.DatabaseContext
                 entity.Property<string>(e => e.Name)
                     .HasMaxLength(50)
                     .IsRequired(true);
+                entity.Property<DateTime>(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
             });
 
             modelBuilder.Entity<Product>(entity =>
