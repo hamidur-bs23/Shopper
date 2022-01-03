@@ -42,5 +42,18 @@ namespace Shopper.BLL.Dtos
 
             return product;
         }
+        
+        public static ProductReadDto ToReadDto_bak(this Product model)
+        {
+            ProductReadDto dto = new ProductReadDto
+            {
+                Name = model.Name,
+                Price = model.Price,
+                Description = model.Description,
+                CategoryName = model.Category.Name
+            };
+
+            return dto;
+        }
     }
 }

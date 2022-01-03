@@ -11,12 +11,14 @@ namespace Shopper.DAL.Repositories.DemoShop
         public Task<Category> AddCategory(Category category);
         public Task<Category> GetCategoryById(int id);
         public Task<ICollection<Category>> GetAllCategories();
+        public Task<Category> UpdateCategory(Category updateCategory);
+        public Task<bool> DeleteCategory(Category categoryForDelete);
+
 
 
         public Task<Product> AddProduct(Product product);
         public Task<Product> GetProductById(int id);
         public Task<ICollection<Product>> GetProductsByListOfIds(ICollection<int> listOfIds);
-
         public Task<ICollection<Product>> GetAll();
         public Task<Product> Update(Product updateProduct);
         public Task<bool> Delete(int id);

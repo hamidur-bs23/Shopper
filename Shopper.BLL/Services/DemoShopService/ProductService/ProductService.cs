@@ -48,6 +48,7 @@ namespace Shopper.BLL.Services.DemoShopService.ProductService
             return resultSet;
         }
 
+
         public async Task<ResultSet<ICollection<CategoryReadDto>>> GetAllCategories()
         {
             ResultSet<ICollection<CategoryReadDto>> resultSet = new ResultSet<ICollection<CategoryReadDto>>();
@@ -66,6 +67,80 @@ namespace Shopper.BLL.Services.DemoShopService.ProductService
             return resultSet;
         }
 
+
+        public async Task<ResultSet<CategoryReadDto>> UpdateCategory(int id, CategoryCreateDto categoryCreateDtoForUpdate)
+        {
+            ResultSet<CategoryReadDto> resultSet = new ResultSet<CategoryReadDto>();
+            try
+            {
+                Category existedCategory = await _productRepo.GetCategoryById(id);
+
+                if (existedCategory == null)
+                {
+                    resultSet.errorMessage = "Not found";
+                    return resultSet;
+                }
+
+                existedCategory.Name = categoryCreateDtoForUpdate.Name;
+
+                Category updatedCategory = await _productRepo.UpdateCategory(existedCategory);
+
+                if (updatedCategory == null)
+                {
+                    resultSet.errorMessage = "Update failed";
+                    return resultSet;
+                }
+
+                CategoryReadDto updatedCategoryReadDto = updatedCategory.ToReadDto();
+
+                resultSet.Data = updatedCategoryReadDto;
+                resultSet.Success = true;
+                
+                return resultSet;
+            }
+            catch (Exception ex)
+            {
+                resultSet.errorMessage = ex.Message;
+                return resultSet;
+            }
+        }    
+        
+        public async Task<ResultSet<bool>> DeleteCategory(int id)
+        {
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            try
+            {
+                Category existedCategory = await _productRepo.GetCategoryById(id);
+                if(existedCategory == null)
+                {
+                    resultSet.errorMessage = "No category exists";
+                    //return resultSet;
+                }
+                else
+                {
+                    try
+                    {
+                        var isDeleted = await _productRepo.DeleteCategory(existedCategory);
+
+                        if (isDeleted)
+                        {
+                            resultSet.Success = true;
+                            //return resultSet;
+                        }
+                    } catch (Exception ex)
+                    {
+                        throw;
+                    }
+                }                    
+            }
+            catch (Exception ex)
+            {
+                resultSet.errorMessage = ex.Message;
+                return resultSet;
+            }
+
+            return resultSet;
+        }
 
 
 
@@ -107,7 +182,7 @@ namespace Shopper.BLL.Services.DemoShopService.ProductService
 
             var fromDb = await _productRepo.GetAll();
 
-            var data = fromDb.Select(x => x.ToEntity()).ToList();
+            var data = fromDb.Select(x => x.ToReadDto()).ToList();
             resultSet.Data = data;
 
             if (resultSet.Data != null)
@@ -137,16 +212,16 @@ namespace Shopper.BLL.Services.DemoShopService.ProductService
                 existedProduct.Description = updateProduct.Description;
                 existedProduct.CategoryId = updateProduct.CategoryId;
 
+                Console.WriteLine("Existed Product - ", existedProduct);
+
                 try
                 {
                     var updatedProduct = await _productRepo.Update(existedProduct);
-                    if(updatedProduct != null)
-                    {
-                        ProductReadDto data = new ProductReadDto
-                        {
+                    Console.WriteLine("Updated Product - ", updatedProduct);
 
-                        };
-                        resultSet.Data = updatedProduct.ToEntity();
+                    if (updatedProduct != null)
+                    {
+                        resultSet.Data = updatedProduct.ToReadDto();
                         resultSet.Success = true;
                     }
                 }

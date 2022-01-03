@@ -11,18 +11,16 @@ namespace Shopper.BLL.Services.DemoShopService.ProductService
     {
         public Task<ResultSet<Category>> AddCategory(CategoryCreateDto categoryCreateDto);
         public Task<ResultSet<Category>> GetCategoryById(int id);
-
         public Task<ResultSet<ICollection<CategoryReadDto>>> GetAllCategories();
+        public Task<ResultSet<CategoryReadDto>> UpdateCategory(int id, CategoryCreateDto updateCategory);
+        public Task<ResultSet<bool>> DeleteCategory(int id);
+
 
 
         public Task<ResultSet<Product>> AddProduct(ProductCreateDto productCreateDto);
         public Task<ResultSet<Product>> GetProductById(int id);
-
-
         public Task<ResultSet<ICollection<ProductReadDto>>> GetAll();
-
         public Task<ResultSet<ProductReadDto>> Update(int id, ProductCreateDto updateProduct);
-
         public Task<ResultSet<bool>> Delete(int id);
     }
 }

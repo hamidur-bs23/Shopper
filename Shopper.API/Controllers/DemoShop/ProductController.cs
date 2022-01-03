@@ -97,6 +97,56 @@ namespace Shopper.API.Controllers.DemoShop
         }
 
 
+        [HttpPut("category/update/{id}")]
+        public async Task<ActionResult<ResultSet<CategoryReadDto>>> Update(int id, CategoryCreateDto categoryForUpdate)
+        {
+            ResultSet<CategoryReadDto> resultSet = new ResultSet<CategoryReadDto>();
+            try
+            {
+                resultSet = await _productService.UpdateCategory(id, categoryForUpdate);
+
+                if (resultSet.Success == false)
+                {
+                    return NotFound();
+                }
+
+                return Ok(resultSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
+        }
+
+
+        [HttpDelete("category/delete/{id}")]
+        public async Task<ActionResult<ResultSet<bool>>> DeleteCategory(int id)
+        {
+            ResultSet<bool> resultSet = new ResultSet<bool>();
+            try
+            {
+                resultSet = await _productService.DeleteCategory(id);
+
+                if (resultSet.Success == false)
+                {
+                    return NotFound();
+                }
+
+                return Ok(resultSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.AppExceptionHandler());
+            }
+
+        }
+
+
+
+
+
+
+
         /// <summary>
         /// Add new product
         /// </summary>

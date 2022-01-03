@@ -18,6 +18,7 @@ namespace Shopper.DAL.Repositories.DemoShop
             _productDbContext = productDbContext;
         }
 
+
         public async Task<Category> AddCategory(Category category)
         {
             try
@@ -39,11 +40,50 @@ namespace Shopper.DAL.Repositories.DemoShop
             return categoryFromDb;
         }
 
+
         public async Task<ICollection<Category>> GetAllCategories()
         {
-            var dataFromDb = _productDbContext.Categories.Include(x => x.Products).ToList();
+            var dataFromDb = _productDbContext.Categories
+                .Include(x => x.Products)
+                .OrderBy(x => x.Name)
+                .ToList();
             return dataFromDb;
         }
+
+
+        public async Task<Category> UpdateCategory(Category categoryForUpdate)
+        {
+            try
+            {
+                Category updatedCategory = _productDbContext.Categories.Update(categoryForUpdate).Entity;
+                if(await _productDbContext.SaveChangesAsync() > 0)
+                {
+                    return updatedCategory;
+                }
+                else
+                {
+                    return null;
+                }
+            } catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public async Task<bool> DeleteCategory(Category categoryForDelete)
+        {
+            _productDbContext.Categories.Remove(categoryForDelete);
+            if (await _productDbContext.SaveChangesAsync() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+
+
 
 
         public async Task<Product> AddProduct(Product product)
@@ -61,11 +101,13 @@ namespace Shopper.DAL.Repositories.DemoShop
             }
         }
 
+
         public async Task<Product> GetProductById(int id)
         {
             var productFromDb = _productDbContext.Products.Where(x => x.Id == id).FirstOrDefault();
             return productFromDb;
         }
+
 
         public async Task<ICollection<Product>> GetProductsByListOfIds(ICollection<int> listOfIds)
         {
@@ -82,7 +124,6 @@ namespace Shopper.DAL.Repositories.DemoShop
         }
 
 
-
         public async Task<ICollection<Product>> GetAll()
         {
             var productsFromDb = _productDbContext.Products
@@ -93,6 +134,7 @@ namespace Shopper.DAL.Repositories.DemoShop
             return productsFromDb;
         }
 
+
         public async Task<Product> Update(Product updateProduct)
         {
             Product updatedProduct = _productDbContext.Products.Update(updateProduct).Entity;
@@ -102,6 +144,7 @@ namespace Shopper.DAL.Repositories.DemoShop
 
             return updatedProductWithCategory;
         }
+
 
         public async Task<bool> Delete(int id)
         {
@@ -116,5 +159,6 @@ namespace Shopper.DAL.Repositories.DemoShop
             }
             return false;
         }
+    
     }
 }

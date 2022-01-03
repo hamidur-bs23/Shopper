@@ -17,7 +17,7 @@ namespace Shopper.BLL.Dtos
 
     public static class ProductReadDtoExtensions
     {
-        public static ProductReadDto ToEntity(this Product dto)
+        public static ProductReadDto ToReadDto(this Product dto)
         {
             return new ProductReadDto
             {

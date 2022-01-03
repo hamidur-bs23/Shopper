@@ -18,20 +18,33 @@ namespace Shopper.BLL.Dtos
         {
             try
             {
-                var id = model.Id;
-                var name = model.Name;
-
-                var dto = new CategoryReadDto
+                CategoryReadDto dto = new CategoryReadDto
                 {
-                    Id = id,
-                    Name = name,
+                    Id = model.Id,
+                    Name = model.Name,
                 };
 
                 return dto;
             }
             catch (Exception ex)
             {
+                throw new Exception("Data Mapping Failed", ex);
+            }
+        }
+        
+        public static Category ToEntity(this CategoryCreateDto dto)
+        {
+            try
+            {
+                Category model = new Category
+                {
+                    Name = dto.Name
+                };
 
+                return model;
+            }
+            catch (Exception ex)
+            {
                 throw new Exception("Data Mapping Failed", ex);
             }
         }
