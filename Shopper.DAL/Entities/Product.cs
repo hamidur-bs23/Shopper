@@ -28,6 +28,8 @@ namespace Shopper.DAL.Entities
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
+        public DateTime CreatedOn { get; set; }
+
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
 

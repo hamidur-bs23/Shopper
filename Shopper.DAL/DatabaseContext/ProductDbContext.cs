@@ -46,6 +46,7 @@ namespace Shopper.DAL.DatabaseContext
                 entity.Property<int>(e => e.Price).IsRequired();
                 entity.Property<int>(e => e.StockInHand).IsRequired();
                 entity.Property<string>(e => e.Description).HasMaxLength(200).IsRequired(false);
+                entity.Property<DateTime>(e => e.CreatedOn).HasDefaultValueSql("getutcdate()");
 
                 entity.HasOne<Category>(p => p.Category)
                     .WithMany(c => c.Products)

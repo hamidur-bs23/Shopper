@@ -1,6 +1,7 @@
 EF Core Commands
 ======================
-1. add-migration
-2. update-database
+1. add-migration -context [NameOfDbContext]
 
+2. update-database -context [NameOfDbContext]
 
+3. remove-migration -context [NameOfDbContext]

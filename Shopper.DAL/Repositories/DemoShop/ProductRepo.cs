@@ -85,7 +85,10 @@ namespace Shopper.DAL.Repositories.DemoShop
 
         public async Task<ICollection<Product>> GetAll()
         {
-            var productsFromDb = _productDbContext.Products.Include(x => x.Category).ToList();
+            var productsFromDb = _productDbContext.Products
+                .Include(x => x.Category)
+                .OrderByDescending(x => x.CreatedOn)
+                .ToList();
 
             return productsFromDb;
         }
